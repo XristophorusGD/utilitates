@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self';script-src 'self'">
+		<title>RURSUM ADDENDUM!</title>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="container-md">
+		<form id="menu">
+			<div class="mb-2">
+		    		<label for="exemplaremSelect" class="form-label">Task Templates</label>
+				<select name="exemplar" id="exemplaremSelect" required="required" class="form-select form-select-sm" aria-label="Default select example">
+					<option value="blankTask" selected> No template </option>
+					<option value="blumenData"> Blumen Data Entry </option>
+					<option value="iterSubmit"> Submit Itinerary </option>
+					<option value="proctorACC"> Proctor ACCUPLACER </option>
+					<option value="ppsReports"> Weekly PPS Reports </option>
+					<option value="wkPurchase"> Workday Requisitions </option>
+					<option value="fileVendor"> Vendor Filing </option>
+					<option value="searchFile"> Give Requested Files </option>
+					<option value="trioGather"> Office Meeting </option>
+					<option value="timeModify"> Time Sheet Correction </option>
+				</select>
+
+			</div>
+			<div class="mb-2">
+				<label for="taskDuration" class="form-label">Task Duration</label>
+				<input name="duration" required="required" id="taskDuration" type="number" class="form-control" value="1" min="1">
+			</div>
+			<div class="mb-2">
+		    		<label for="beneficiariumSelect" class="form-label"> Beneficiary</label>
+				<select name = "beneficiarium" required="required" id="beneficiariumSelect" class="form-select form-select-sm" multiple aria-label="Default select example">
+					<option disabled="disabled" selected> Beneficiarium </option>
+					<option value="Christophoro"> Christophoros </option>
+					<option value="Howard"> Howard </option>
+					<option value="Mariae"> Mariae </option>
+					<option value="Leae"> Leae </option>
+					<option value="Sandrae"> Sandrae </option>
+					<option value="EOC Central"> EOC Central </option>
+					<option value="TRIO"> TRIO </option>
+				</select>
+				<div id="exemplarAux" class="form-text"> Select all who will benefit from this task</div>
+			</div>
+			<button id="menuButton" type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+	<script src="./creare-pensum.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>
+
+

@@ -1,0 +1,14 @@
+{
+  "name": "asana-iter",
+  "version": "1.0.0",
+  "description": "Extensio utilitatis Asanae qua possum creare itineraria",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christopher H Davis",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.2"
+  }
+}
