@@ -11,61 +11,54 @@
 const cookieParser = require("cookie-parser");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios")
+const path = require("path")
+const repositorium = require('../../repositorium_datorum/repositorium');
+const Asana = require('asana');
+
 require('dotenv').config();
 
 // Data
 const VERVM = true;
 const FALSVM = false;
-exports.tesseraMea = (petitum, responsum) =>
-{
-	if (petitum.cookies.access_token)
-	{
-		const config =
-		{
-			headers:
-			{
-			Authoirzation: "Signfer" + petitum.cookies.access_token
-			}
-		}
-		axios
-		.get("https://app.asana.com/api/1.0/users/me?opt_pretty=true", config)
-		.then((responsum) => responsum.data)
-		.then((descritpioUsuarii) =>
-		{
-			console.log("*** Responsum /users//me:\n")
-			console.log(JSON.stringify(descriptioUsuarii, null, 2))
-			responsum.json(descriptioUsuarii)
-		});
-	}else
-	{
-	//TEMPORALIA: melius scrîbere responsum conditiônî errôris 401 (sine auctoritate)
-	//Potes ûtî axios interceptores
-		responsum.redirect("/");
-	}
-};
-
-
 
 exports.responsum = (petitum, responsum) =>
 {
+	console.log(petitum.query.state)
 	if(petitum.query.state !== petitum.signedCookies.statusOauth)
 	{
 		responsum.status(422).send("Stat&#363;s n&#333;n &#299;dem sunt");
 		return;
 	}
+	else
+	{
+		console.log('\u0101')
+		console.log("****** Tessera permutanda tessera open authentication et status responsî agnitiônis usuarii:\n"
+		)
+		console.log(`tessera: ${petitum.query.code}`)
+		console.log(`status: ${petitum.query.state}\n`)
 
-	console.log(
-	"****** Tessera permutanda tesser\u0101 open authentication et status responsî agnitiônis usuarii:\n"
-	)
+		responsum.sendFile(path.join(__dirname, "../..","static/html/mongoDBPQSME.html"))
+	}
+};
 
-	console.log(`tessera: ${petitum.query.code}`)
-	console.log(`status: ${petitum.query.state}\n`)
-
+exports.rectumPQSME = (petitum, responsum) =>
+{
+	console.log("RECTE probavisti quem dixisti te esse")
+	let tessera = petitum.query.code
+	responsum.redirect(`../salvare-oauth/?code=${tessera}`);
+}
+exports.salvareOauth = async (petitum, responsum) =>
+{
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	console.log("salvare")
+	console.log(petitum.query)
 	const materia =
 	{
 		grant_type: "authorization_code",
 		client_id: process.env.CLIENT_ID,
-		client_secret:"",
+		client_secret: usuariusMongo.tacendum_usuarii,
 		redirect_uri: process.env.REDIRECT_URI,
 		code: petitum.query.code,
 	}
@@ -84,23 +77,22 @@ exports.responsum = (petitum, responsum) =>
 		console.log(responsum.data)
 		return responsum.data
 	})
-	.then((data) =>
+	.then( async (data) =>
 	{
 		//TEMPORALIA: melius est servâre in repositôriô datôrum
-		responsum.cookie("access_token", data.access_token, { maxAge: 60*60*1000});
-		responsum.cookie("refresh_token", data.refresh_token,
-		{
-			httpOnly: VERVM,
-			secure: VERVM
-		});
 
-		responsum.redirect(`/access_token=${data.access_token}`);
+		let client = Asana.ApiClient.instance;
+		let token = client.authentications['token'];
+		token.accessToken = data.access_token;
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {aditusclavis: data.access_token}})
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {novusaditus: data.refresh_token}})
+		//responsum.redirect(`../access_token=${data.access_token}`);
+		responsum.redirect('../../operari')
 	}).catch((error) =>
 	{
 		console.log(error.message);
 	});
 };
-
 
 //creatur pagina secunda qua status generatur 
 
@@ -115,6 +107,7 @@ exports.agnoscere = (petitum, responsum) =>
 		maxAge: 1000*60*5,
 		signed: VERVM
 	});
+
 	//statu oauth creato, adimus ad paginam agnitiônis Asana
 	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&state=${statusOauth}`);
 }
@@ -122,5 +115,5 @@ exports.agnoscere = (petitum, responsum) =>
 
 exports.permittereAgnoscere = (petitum, responsum) =>
 {
-	responsum.sendFile(path.join(__dirname, "index.html"));
+	responsum.sendFile(path.join(__dirname, "../../html","index.html"));
 };

@@ -2,6 +2,7 @@ const express = require('express');
 const functiones = require('../functiones/oauthPactumFunctiones');
 const directorium = express.Router();
 const cookieParser = require("cookie-parser");
+const path = require("path")
 const basis = 'oauth';
 require('dotenv').config();
 directorium.use(cookieParser(process.env.COOKIE_SECRET))
@@ -13,7 +14,7 @@ directorium.get(`/${basis}`, functiones.permittereAgnoscere);
 
 directorium.get(`/${basis}/agnoscere`, functiones.agnoscere);
 directorium.get(`/${basis}/responsum`, functiones.responsum);
-directorium.get(`/${basis}/tessera-mea`, functiones.tesseraMea);
-
+directorium.get(`/${basis}/salvare-oauth`, functiones.salvareOauth);
+directorium.get(`/${basis}/rectum-pqsme`, functiones.rectumPQSME);
 
 module.exports = directorium;

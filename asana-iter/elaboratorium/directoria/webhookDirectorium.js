@@ -1,8 +1,10 @@
 const express = require('express');
 const functiones = require('../functiones/webhookPactiFunctiones');
 const directorium = express.Router();
-const basis = 'webhook';
+const basis = 'emissio';
+const bodyParser = require('body-parser');
+directorium.use(bodyParser.json())
 
-directorium.get(`/${basis}/accipere-webhook`, functiones.accipereWebhook);
+directorium.post(`/${basis}/immissio`, functiones.accipereWebhook);
 
 module.exports = directorium;

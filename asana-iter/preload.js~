@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld(
 		ad: (canalis, conditiones) =>
 		{
 			//approbatio iussorum - index cresci potest
-					let licitiCanales = ["PQSME", "describe-pensum","da-asanae-pensum","da-asanae-sectiones", "da-asanae-diem",  "da-asanae-pensula", "word-constituere", "json-constituere","adde-pensum"];
+					let licitiCanales = ["aditum-ad-asanam","pqsme-mongo-oauth", "describe-pensum","word-constituere", "json-constituere","adde-pensum"];
 			if (licitiCanales.includes(canalis))
 			{
 				ipcRenderer.send(canalis, conditiones);
@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld(
 		},
 		ab: (canalis, functio) =>
 		{
-				let licitiCanales = ["mongodb-ignotum", "mongodb-notum","creatum-pensum","data-asanae-pensula","datum-asanae-pensum","datae-asanae-sectiones", "datus-asanae-dies", "itinerarium_promptum"]
+				let licitiCanales = ["oauth-aditus-asanae", "mongodb-ignotum", "mongodb-notum","creatum-pensum", "itinerarium_promptum"]
 			if (licitiCanales.includes(canalis)){
 				//"Deliberately stirp event as it includes 'sender'
 				ipcRenderer.on(canalis, (event, conditiones) => functio(conditiones));

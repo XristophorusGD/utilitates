@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-16">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self';script-src 'self'">
+		<title>Hello World!</title>
+		<link href="../css/Asanacss.css" rel="stylesheet">
+		<link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container vstack gap-10">
+			<div class="container-fluid">
+				<div class="d-flex justify-content-center">
+					<h1> Vtentiam MongoDB</h1>
+				</div>
+				<div class="col-auto alert alert-success">
+					PQSME inter Asanam et Oauth bene accidit!
+				</div>
+				<button id="itinerariumDepromere" type="button" class="btn btn-primary col-auto">Itiner&amacr;rium Praestentem D&emacr;pr&omacr;mere</button>
+			<div>
+			<div>
+				<ul class="container list-group list-group-horizontal" >
+					<li class="col-4 list-group-item"> Utimur Node.js <span id="node-version"></span></li>
+					<li class="col-4 list-group-item"> Chromio <span id="chrome-version"></span><li>
+					<li class="col-4 list-group-item">Electro <span id="electron-version"></span><li>
+				</ul>
+			</div>
+		</div>
+		<script src="../bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="../static/js/operariTRIOForecaster.js"></script>
+	</body>
+</html>
+

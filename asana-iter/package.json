@@ -16,6 +16,7 @@
     "@ngrok/ngrok": "^1.4.1",
     "asana": "^3.0.0",
     "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
     "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
