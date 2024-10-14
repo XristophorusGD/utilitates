@@ -148,6 +148,21 @@ app.on('window-all-closed', async (e)=>
  * ||    \\_// || \||  \\__   ||   ||  \\_// 
  *                                          
  * functio************************************
+ * Title: itinerarium-restituere
+ * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itinerarium-restituere", ipcFunctiones.itinerariumRestituere)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
  * Title: PQSME
  * Descriptio: Proba an datum ûsuâriî nômen et tesseram pertineant ad ûsuârium repositôriî Mongo
  * Intus: tesseraMongo

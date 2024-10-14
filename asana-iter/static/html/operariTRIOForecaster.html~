@@ -17,6 +17,7 @@
 					PQSME inter Asanam et Oauth bene accidit!
 				</div>
 				<button id="itinerariumDepromere" type="button" class="btn btn-primary col-auto">Itiner&amacr;rium Praestentem D&emacr;pr&omacr;mere</button>
+				<button id="itinerariumVacuefacere" type="button" class="btn btn-primary col-auto">Itiner&amacr;rium Praestentem D&emacr;pr&omacr;mere</button>
 			<div>
 			<div>
 				<ul class="container list-group list-group-horizontal" >

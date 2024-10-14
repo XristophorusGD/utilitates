@@ -877,6 +877,55 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
 	return 0;
 	
 }
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerarium-restituere
+ * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
+ * Intus: nil
+ * Exitus: nil
+ */
+
+exports.itinerariumRestituere = async (e) =>
+{
+	let sectiones = await asanaeSectiones();
+	let pensa = await asanaePensaSeptimanae(sectiones);
+	let pensorumSingula = await asanaePensorumSingula(pensa);
+	let tasksApiInstance = new Asana.TasksApi();
+	let finis = await asanaeSectionesUltimae()
+
+	for (let dies in pensorumSingula)
+	{
+		for (let pensum of pensorumSingula[dies])
+		{
+			let locus = 0;
+			if(!pensum.completed)
+			{
+				locus = 1;
+			}
+			let materia =
+			{
+				"data":
+				{
+					"project": "1207982562429472",
+					"section": finis[locus]
+				}
+			}
+			tasksApiInstance.addProjectForTask(materia, pensum.gid).then((exitus) =>
+			{
+			}, (error) => 
+			{
+				console.error(error.response.body);
+			});
+		}
+	}
+
+	console.log("Pensa vacuefacta")
+}
 
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
@@ -885,7 +934,7 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
  * ||    \\_// || \||  \\__   ||   ||  \\_//
  *
  * functio************************************
- * Title: ePnsorumSingulaWord
+ * Title: PensorumSingulaWord
  * Descriptio: Consequî pensa ex quibus quoddam penum constitutur
  * Intus:
  *      (o) eventus
@@ -910,7 +959,8 @@ function pensorumSingulaWord(diesVal, pensorumIndex)
 					font: "Avenir Next LT Pro Light",
 					size: 12,
 					text: pensorumIndex[diesVal][i]['name'],
-					bold: true
+					bold: true,
+					strike: pensorumIndex[diesVal][i]['completed']
 				})
 			],
 			bullet:
@@ -952,6 +1002,7 @@ function pensorumSingulaWord(diesVal, pensorumIndex)
 	return index;
 }
 
+
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
  * ||    || || ||\ ||  //   | || | ||  // \\
@@ -980,6 +1031,7 @@ async function asanaePensorumSingula(pensorumIndex)
 			let tasksApiInstance = new Asana.TasksApi();
 			await tasksApiInstance.getTask(pensorumIndex[locus[i]][k].gid).then((pensiSingula) =>
 			{
+				pensorumIndex[locus[i]][k]['completed'] = pensiSingula.data.completed;
 				pensorumIndex[locus[i]][k]['description'] = pensiSingula.data.notes;	
 			}, (error) =>
 			{
@@ -1067,7 +1119,8 @@ async function asanaePensaSeptimanae(sectionumGID)
 					"gid": pensaSect.data[k].gid,
 					"name": pensaSect.data[k].name,
 					"description": "",
-					"last_comment": ""
+					"last_comment": "",
+					"completed": false
 				}
 				)
 			}
@@ -1126,6 +1179,59 @@ exports.asanaeDiem = (e, diesGid, diesNomen) => {
 
 }
 
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaeSectionesUltimae
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) eventus
+ *      (o) conditiones
+ * Exitus: nil
+ */
+async function asanaeSectionesUltimae()
+{
+	let sectionsApiInstance = new Asana.SectionsApi();
+	
+	
+	let project_gid = 1207982562429472;
+	let opts = {
+		'limit': 10,
+	};
+
+	let indexDierumGID = new Array(1);
+
+	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
+	.then((datae_sectiones) =>
+	{
+		console.log('Invenitur utimae sectiônês')
+		return datae_sectiones.data;
+	}).then((dierumSectiones) =>
+	{
+		for (i = 0; i < dierumSectiones.length; i++)
+		{
+			let locus = 0;
+			if (dierumSectiones[i].name == "Completed" || dierumSectiones[i].name == "Terminado" || dierumSectiones[i].name == "Perfecta")
+			{
+				locus = 0;
+			}
+			if (dierumSectiones[i].name == "To Do" || dierumSectiones[i].name == "Tareas" || dierumSectiones[i].name == "Tarefas" || dierumSectiones[i].name == "Pensa Agenda")
+			{
+				locus = 1;
+			}
+			indexDierumGID[locus] = dierumSectiones[i].gid;
+		}
+	}).catch((error) =>
+	{
+		console.error(error)
+	});
+
+	return indexDierumGID;
+}
 
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
@@ -1191,6 +1297,10 @@ async function asanaeSectiones()
 			if (dierumSectiones[i].name == "Sunday" || dierumSectiones[i].name == "Domingo" || dierumSectiones[i].name == "Dies Solis")
 			{
 				locus = 6;
+			}
+			if (dierumSectiones[i].name == "To Do" || dierumSectiones[i].name == "Tareas" || dierumSectiones[i].name == "Tarefas" || dierumSectiones[i].name == "Pensa Agenda") 
+			{
+				locus = 7;
 			}
 
 			indexDierumGID[locus] = dierumSectiones[i].gid;

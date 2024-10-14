@@ -5,3 +5,9 @@ document.querySelector('#itinerariumDepromere').addEventListener('click', (e) =>
 	let dies = new Date()
 	window.Asana.ad("word-constituere", dies)
 });
+
+
+document.querySelector('#itinerariumVacuefacere').addEventListener('click', (e) =>
+{
+	window.Asana.ad("itinerarium-restituere", dies)
+});
