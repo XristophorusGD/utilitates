@@ -1,0 +1,29 @@
+body.tibiternondum
+{
+	background-color: #ffd8d0;
+}
+
+body.tibiternondum > button
+{
+	background-color: #03498e;
+}
+
+body.seratibitinera
+{
+	background-color: #fff381;
+}
+
+body.seratibitinera > button
+{
+	background-color: #1b046b;
+}
+
+body.expectaturiter
+{
+	background-color: #d1d7ff;
+}
+
+body.expectaturiter > button
+{
+	background-color: #04686b;
+}

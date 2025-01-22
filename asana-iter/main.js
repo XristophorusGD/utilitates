@@ -106,6 +106,7 @@ app.on('window-all-closed', async (e)=>
 				{
 					console.error(error.response.body)
 				});
+				clearInterval(usuariusMongo['temporisSignum']);
 			}
 			catch(error)
 			{

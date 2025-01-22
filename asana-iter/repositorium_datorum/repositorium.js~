@@ -35,7 +35,7 @@ class ususRepositorii
 			const REPOSITORIVM_DATORVM = `mongodb://${auctoritasMongo['usuarium']}:${auctoritasMongo['tesseraMongoDB']}@0.0.0.0:27017`
 			ususRepositorii.#usuariumMongo = new MongoClient(REPOSITORIVM_DATORVM)
 			ususRepositorii.#repositorium = ususRepositorii.#usuariumMongo.db("test");
-			console.log(" Uteris Repositorio Probationis")
+			console.log("Uteris Repositorio Probationis")
 		}
 		catch(error)
 		{

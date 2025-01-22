@@ -838,25 +838,28 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
 			    ]}),
 			],
 	   });
-	    doc.addSection({
-		properties: {
-		    type:docx.SectionType.CONTINUOUS,
-		    page:{
-			margin: {
-			    right: 750,
-			    bottom: 750,
-
-			    left: 750,
-			    header: 750,
-				
-			}
-		    }
-		},
-		children: [
-			    new docx.Paragraph({children: []}),
-			    new docx.Table({rows: compHours}),
-		]
-	     });
+		doc.addSection(
+		{
+			properties:
+			{
+				type:docx.SectionType.CONTINUOUS,
+				page:
+				{
+					margin:
+					{
+						right: 750,
+						bottom: 750,
+						left: 750,
+						header: 750,
+					}
+				}
+			},
+			children:
+			[
+				new docx.Paragraph({children: []}),
+				new docx.Table({rows: compHours}),
+			]
+		});
 	
 		docx.Packer.toBuffer(doc).then((buffer) =>
 		{
@@ -874,9 +877,27 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
 			fs.writeFileSync(iterprint_file, buffer);
 			console.log("saved: " + iterprint_file);
 		});
+
+		let iterjson_file = iterpath(".json", hicLunaeDies);
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(jsoninvenitur)
+		{
+			let itinerarium_json = fs.readFileSync(iterjson_file, "utf8")
+			let itinerarium_septimanae = JSON.parse(itinerarium_json)
+			itinerarium_septimanae.push(pensorumSingula)
+			fs.writeFileSync(iterjson_file, JSON.stringify(itinerarium_septimanae));
+		}
+		else
+		{
+			let itinerarium_matrix = [pensorumSingula]
+			fs.writeFileSync(iterjson_file, JSON.stringify(itinerarium_matrix));
+		}
+		
 	return 0;
 	
-}
+	}
+
+
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
  * ||    || || ||\ ||  //   | || | ||  // \\
@@ -892,41 +913,203 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
 
 exports.itinerariumRestituere = async (e) =>
 {
-	let sectiones = await asanaeSectiones();
-	let pensa = await asanaePensaSeptimanae(sectiones);
-	let pensorumSingula = await asanaePensorumSingula(pensa);
-	let tasksApiInstance = new Asana.TasksApi();
-	let finis = await asanaeSectionesUltimae()
-
-	for (let dies in pensorumSingula)
-	{
-		for (let pensum of pensorumSingula[dies])
+	let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella()
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {itinerariiStatus: 
 		{
-			let locus = 0;
-			if(!pensum.completed)
-			{
-				locus = 1;
-			}
-			let materia =
-			{
-				"data":
-				{
-					"project": "1207982562429472",
-					"section": finis[locus]
-				}
-			}
-			tasksApiInstance.addProjectForTask(materia, pensum.gid).then((exitus) =>
-			{
-			}, (error) => 
-			{
-				console.error(error.response.body);
-			});
+			backlog: false,
+			praesensAbest: false,
+			diesLunae: false,
+			impressa: []
 		}
-	}
+	}})
+	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
 
-	console.log("Pensa vacuefacta")
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let monitio = ""
+	let monenda_itineraria = await comprobareItinerariaSera()
+	arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.backlog": (monenda_itineraria.length > 0) }})
+	
+	for (let i = 0; i < monenda_itineraria.length; i++)
+	{
+		monitio += monenda_itineraria[i].getDate() + " " + menses[monenda_itineraria[i].getMonth()]+ " " + monenda_itineraria[i].getFullYear() + "\n";
+	}
+	if (monenda_itineraria.length)
+	{
+		fenPQSME.webContents.send("seratibitinera",{monitio:monitio, itinerariiStatus: usuariusMongo.itinerariiStatus})
+	}
+	const temporisSignum = setInterval(comprobareHoram, 5000)
+	console.log("Novus ambitus")
+	//arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {temporisSignum: temporisSignum}})
+	//console.log(pensorumSingula)
 }
 
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: comprobareHoram
+ * Descriptio: Comprobat an itinerâria praeterita nîmis vetera sint. Sî sunt, indicem itinerâriôrum faciendôrum reddit
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+async function comprobareItinerariaSera()
+{
+	let nunc = new Date();
+	let annoAddendum = (nunc.getMonth() < 8)
+	let initiumAnni = new Date(nunc.getFullYear()-annoAddendum, 8)
+	let initiumLunae = diesLunae(initiumAnni, 0)
+	let diesLunaeNunc = diesLunae(nunc, -1)
+
+	let monendum = []
+	while (initiumLunae <= diesLunaeNunc)
+	{
+		let iterjson_file = iterpath(".json", initiumLunae);
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(!jsoninvenitur)
+		{
+			monendum.push(initiumLunae)
+		}
+
+		initiumLunae = diesLunae(initiumLunae, 1)
+	}
+	return monendum;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: comprobareHoram
+ * Descriptio: Comprobat an itinerârium praesens nîmis vetus sit. Sî est, vacuefacit itinerârium
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+async function comprobareHoram()
+{
+	let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella()
+	let nunc = new Date();
+
+	let diesLunaeNunc = diesLunae(nunc, 0)
+
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let iterjson_file = iterpath(".json", new Date(usuariusMongo['itinerariumPraesens']));
+	let dies_praeteriti = (nunc - usuariusMongo['itinerariumPraesens'])/(1000*60*60*24)
+	if(dies_praeteriti > 7)
+	{
+/*
+		let itinerariorumserorum_locus = iterpath("", new Date(usuariusMongo['itinerariumPraesens']))+"_praeterita_itineraria.json";
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(!jsoninvenitur)
+		{
+			let itineraserainveniuntur = fs.existsSync(itinerariorumserorum_locus);
+
+			if(!itineraserainveniuntur)
+			{
+				let itinerariorumserorum_index = [usuariusMongo['itinerariumPraesens']]
+				fs.writeFileSync(itinerariorumserorum_locus , JSON.stringify(itinerariorumserorum_index));
+				return;
+			}
+			
+		}
+
+		let itinerariasera_json = fs.readFileSync(itinerariorumserorum_locus, "utf8")
+		let itinerariasera_index = JSON.parse(itinerariasera_json)
+		let priusiter = JSON.parse(JSON.stringify(new Date (usuariusMongo['itinerariumPraesens'])));
+
+		if(!itinerariasera_index.includes(priusiter))
+		{
+			itinerariasera_index.push(usuariusMongo['itinerariumPraesens'])	
+			fs.writeFileSync(itinerariorumserorum_locus, JSON.stringify(itinerariasera_index));
+		}
+*/
+
+		//initium diêî novâ
+
+		console.log("Multo tempore non utilitate usus es")
+		console.log("Hercle, hac utitur post " + Math.floor(dies_praeteriti) + " dies!")
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {itinerariumPraesens: diesLunae(nunc,0)}})
+
+		//itinerârium vacuefac
+		let sectiones = await asanaeSectiones();
+		let pensa = await asanaePensaSeptimanae(sectiones);
+		let pensorumSingula = await asanaePensorumSingula(pensa);
+		let tasksApiInstance = new Asana.TasksApi();
+		let finis = await asanaeSectionesUltimae()
+	
+		console.log("Movens ad novam septimanam")
+		for (let dies in pensorumSingula)
+		{
+			for (let pensum of pensorumSingula[dies])
+			{
+				let locus = 0;
+				if(!pensum.completed)
+				{
+					locus = 1;
+				}
+				let materia =
+				{
+					"data":
+					{	
+						"project": "1207982562429472",
+						"section": finis[locus]
+					}
+				}
+				tasksApiInstance.addProjectForTask(materia, pensum.gid).then((exitus) =>
+				{
+				}, (error) => 
+				{
+					console.error(error.response.body);
+				});
+			}
+		}
+		console.log("Pensa vacuefacta")
+	}
+
+	if((nunc - usuariusMongo['itinerariumPraesens'])/(1000*60*60*24) == 0)
+	{
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.diesLunae": true }})
+		fenPQSME.webContents.send("expectaturiter", usuariusMongo.itinerariiStatus)
+		return;
+	}
+	else
+	{
+
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.diesLunae": false }})
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(jsoninvenitur)
+		{
+		
+			arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.praesensAbest": false }})
+			fenPQSME.webContents.send("tibistnunciter", usuariusMongo.itinerariiStatus)
+			return;
+		}
+		else
+		{
+
+			arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.praesensAbest": true }})
+			fenPQSME.webContents.send("tibiternondum",  usuariusMongo.itinerariiStatus)
+			return;
+		}
+	}
+}
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
  * ||    || || ||\ ||  //   | || | ||  // \\
@@ -1022,8 +1205,8 @@ async function asanaePensorumSingula(pensorumIndex)
 {
 	let taskApiInstance = new Asana.TasksApi();
 	let storiesApiInstance = new Asana.StoriesApi();
-	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-	for(let i=0;i < 6; i++)
+	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "To Do"];
+	for(let i=0; i < 8; i++)
 	{
 		
 		for(let k = 0; k < pensorumIndex[locus[i]].length; k++)
@@ -1104,10 +1287,11 @@ async function asanaePensaSeptimanae(sectionumGID)
 			"Thursday":[],
 			"Friday":[],
 			"Saturday":[],
-			"Sunday":[]
+			"Sunday":[],
+			"To Do":[]
 		}
-	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-	for(let i=0;i < 7; i++)
+	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "To Do"];
+	for(let i=0;i < 8; i++)
 	{
 		let tasksApiInstance = new Asana.TasksApi();
 		await tasksApiInstance.getTasksForSection(sectionumGID[i]).then((pensaSect) =>
@@ -1208,7 +1392,6 @@ async function asanaeSectionesUltimae()
 	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
 	.then((datae_sectiones) =>
 	{
-		console.log('Invenitur utimae sectiônês')
 		return datae_sectiones.data;
 	}).then((dierumSectiones) =>
 	{
@@ -1262,7 +1445,6 @@ async function asanaeSectiones()
 	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
 	.then((datae_sectiones) =>
 	{
-		console.log('Week tasks loaded. Returned')
 		let sectDierum = datae_sectiones.data.slice(0,8);
 		return sectDierum;
 	}).then((dierumSectiones) =>
@@ -1364,6 +1546,10 @@ function iterpath(filetype, refdies)
 	let iter_name = [lName+fName,
 	"Wk_Iter",
 	mondayDate+menses[monthNum]+annus];
+
+	//creare locum modo recursante (sî locus iam est, nôn est error)
+	fs.mkdirSync(iter_dir.join("/"), {recursive: true});
+
 	const iterfile = iter_dir.join("/") + iter_name.join("_");
 	if(filetype=="")
 	{
@@ -1384,8 +1570,8 @@ function iterpath(filetype, refdies)
 			versionSuffix = "_v" + version + filetype;
 			latestFound = !(fs.existsSync(iterfile+versionSuffix));
 		}
-			if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}
-			return {"write":iterfile + versionSuffix, "read": iterfile+"_v" + (version -1) + filetype};
+		if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}
+		return {"write":iterfile + versionSuffix, "read": iterfile+"_v" + (version -1) + filetype};
 	}
 }
 
@@ -1396,6 +1582,7 @@ function diesLunae(refDay, weekInterval)
 	 let monthNum   = refDay.getMonth();
 	 let mondayDist = refDay.getDay()-1;
 	 let mondayDate = refDay.getDate() - mondayDist;
+
 	//PARS I: computa diem itinerarii
 	//
 	mondayDate += weekInterval*7;

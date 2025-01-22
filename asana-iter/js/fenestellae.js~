@@ -83,7 +83,7 @@ class fenestellaPQSME
 
 	static utiFenestella()
 	{
-		console.log("PQSME Nunc")
+		console.log("Utens fenestella PQSME")
 		return new Promise(async (solutum, falsum) =>
 		{
 			if(!fenestellaPQSME.#estneFenestella())
