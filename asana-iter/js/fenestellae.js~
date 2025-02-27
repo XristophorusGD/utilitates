@@ -98,8 +98,10 @@ class fenestellaPQSME
 
 	static relinquereFenestellam()
 	{
-		fenestellaPQSME.#fenestella.close;
-		fenestellaPQSME.#simulacrum = undefined;
+		fenestellaPQSME.#fenestella.close();
+		fenestellaTypisExprimendi.#simulacrum = undefined;
+		fenestellaTypisExprimendi.#fenestella = undefined;
+		fenestellaTypisExprimendi.#seConstituit = false;
 	}
 }
 
@@ -119,23 +121,24 @@ class fenestellaPQSME
  * Exitus: nullus
  */
 
-class fenestellaDescriberePensum
+class fenestellaTypisExprimendi
 {
 	static #simulacrum;
 	static #fenestella;
 	static #seConstituit = false;
-	static #pagina = path.join(__dirname, "..","/html/adderePensumAsana.html");
-	static #mensurae = [800,700]
+	static #pagina = path.join(__dirname, "..","/html/exprimereTRIOForecaster.html");
+//	static #pagina = path.join("/static/htmladderePensumAsana.html");
+	static #mensurae = [450,250]
 
 	constructor()
 	{
-		if (!fenestellaDescriberePensum.#seConstituit)
+		if (!fenestellaTypisExprimendi.#seConstituit)
 		{
 			throw new TypeError("functione new simulacrum non creatur")
 		}
 		else
 		{
-			console.log("Fenestella PQSME creatum")
+			console.log("Fenestella qua index itinerariorum typis exprimendorum creata")
 		}
 	}
 	static #estneFenestella()
@@ -146,13 +149,16 @@ class fenestellaDescriberePensum
 
 	async #initialize(eCongeries)
 	{
-		console.log("RIGIDUS THALARUS V")
 		try
 		{
-			fenestellaDescriberePensum.#fenestella = new BrowserWindow(
+			fenestellaTypisExprimendi.#fenestella = new BrowserWindow(
 				{
-			                width:  fenestellaPQSME.#mensurae[0],
-			                height: fenestellaPQSME.#mensurae[1],
+
+					alwaysOnTop: true,
+					frame: false,
+					resizable: false,
+			                width:  fenestellaTypisExprimendi.#mensurae[0],
+			                height: fenestellaTypisExprimendi.#mensurae[1],
 			                webPreferences:
 					{
 						nodeIntegration: false,
@@ -163,8 +169,7 @@ class fenestellaDescriberePensum
 					}
 			        })
 
-				fenestellaDescriberePensum.#fenestella.loadFile(fenestellaPQSME.#pagina)
-				fenestellaDescriberePensum.#fenestella.webContents.send("creatum-pensum", eCongeries)
+				fenestellaTypisExprimendi.#fenestella.loadFile(fenestellaTypisExprimendi.#pagina)
 		}
 		catch(error)
 		{
@@ -174,28 +179,29 @@ class fenestellaDescriberePensum
 
 	static utiFenestella(eCongeries)
 	{
-		console.log("ECCCEE")
 		return new Promise(async (solutum, falsum) =>
 		{
-			if(!fenestellaDescriberePensum.#estneFenestella())
+			if(!fenestellaTypisExprimendi.#estneFenestella())
 			{
-				fenestellaDescriberePensum.#seConstituit = true;
-				fenestellaDescriberePensum.#simulacrum = new fenestellaDescriberePensum();
-				await fenestellaDescriberePensum.#simulacrum.#initialize(eCongeries)
+				fenestellaTypisExprimendi.#seConstituit = true;
+				fenestellaTypisExprimendi.#simulacrum = new fenestellaTypisExprimendi();
+				await fenestellaTypisExprimendi.#simulacrum.#initialize(eCongeries)
 			}
-			solutum(fenestellaDescriberePensum.#fenestella)
+			solutum(fenestellaTypisExprimendi.#fenestella)
 		})
 	}
 
 	static relinquereFenestellam()
 	{
-		fenestellaDescriberePensum.#fenestella.close;
-		fenestellaDescriberePensum.#simulacrum = undefined;
+		fenestellaTypisExprimendi.#fenestella.close();
+		fenestellaTypisExprimendi.#simulacrum = undefined;
+		fenestellaTypisExprimendi.#fenestella = undefined;
+		fenestellaTypisExprimendi.#seConstituit = false;
 	}
 }
 
 module.exports =
 {
 	fenestellaPQSME: fenestellaPQSME,
-	fenestellaDescriberePensum: fenestellaDescriberePensum
+	fenestellaTypisExprimendi: fenestellaTypisExprimendi
 }

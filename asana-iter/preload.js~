@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld(
 		ad: (canalis, conditiones) =>
 		{
 			//approbatio iussorum - index cresci potest
-						let licitiCanales = ["itinerarium-restituere","aditum-ad-asanam","pqsme-mongo-oauth", "describe-pensum","word-constituere", "json-constituere","adde-pensum"];
+						let licitiCanales = ["noli-indicem-creare", "itineraria-typis-exprimere","itinerarium-restituere","aditum-ad-asanam","pqsme-mongo-oauth", "describe-pensum","word-constituere", "json-constituere","adde-pensum"];
 			if (licitiCanales.includes(canalis))
 			{
 				ipcRenderer.send(canalis, conditiones);

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-16">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self';script-src 'self'">
+		<title>TRIO Forecaster Print Job Preparation</title>
+		<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+		<h1>Indicem Typ&imacr;s Exprimend&imacr; </h1>
+		<form>
+		<div class="form-check">
+			<div>
+				<input class="form-check-input" type="radio" name="genusExpressionis" id="intervallaTypisExprimere" value="intervalla-typis-exprimere" />
+				<label class="form-check-label" for="intervallaTypisExprimere"> Date Range </label>
+				<div name="formula-typis-exprimendi">
+					<input type="date" name="diesPrimumExpressionis" id="diesPrimumExpressionis" />
+					<label class="form-check-label" for="diesPrimum"> Start Date </label>
+					<input type="date" name="diesUltimumExpressionis" id="diesUltimumExpressionis" />
+					<label class="form-check-label" for="diesPrimum"> End Date </label>
+				</div>
+			</div>
+			<div>
+				<input class="form-check-input" type="radio" name="genusExpressionis" id="singulariaTypisExprimere" value="singularia-typis-exprimere" />
+				<label class="form-check-label" for="singulariaTypisexprimere"> Custom </label>
+				<div name="formula-typis-exprimendi">
+					<input class="form-control" type="text" placeholder="Custom" name="expressionisFormula" id="experssionisFormula"/>
+				</div>
+			</div>
+			<button class="btn btn-primary mb-3" type="submit" id="indicemCreare"> Indicem Cre&amacr; </button>
+			<button class="btn btn-danger mb-3" type="button" id="noliIndicemCreare"> N&omacr;l&imacr; Indicem Cre&amacr;re </button>
+		</form>
+		</div>
+		</div>
+		<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="../js/exprimereTRIOForecaster.js"></script>
+	</body>
+</html>

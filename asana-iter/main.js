@@ -142,6 +142,56 @@ app.on('window-all-closed', async (e)=>
 })
 
 
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: indicem-creare
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("indicem-creare", ipcFunctiones.indicemCreare)
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: noli-indicem-creare
+ * Descriptio: Fenestellam quâ indicem itinerâriôrum creâtur tollit 
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("noli-indicem-creare", ipcFunctiones.noliIndicemCreare)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: itineraria-typis-exprimere
+ * Descriptio: Fenestellam legat qua ûsuârius itinerâria exprimenda êligit diêbus scribendô 
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itineraria-typis-exprimere", ipcFunctiones.itinerariaTypisExprimere)
+
+
 /*
  *  ____ __ __ __  __   ___ ______ __   ___  
  * ||    || || ||\ ||  //   | || | ||  // \\ 

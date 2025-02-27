@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-16">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self';script-src 'self'">
-		<title>Hello World!</title>
+		<title>TRIO Forecaster</title>
 
 		<link href="../static/css/itinerariistatus.css" rel="stylesheet">
 		<link href="../css/Asanacss.css" rel="stylesheet">
@@ -19,7 +19,9 @@
 					PQSME inter Asanam et Oauth bene accidit!
 				</div>
 				<button id="itinerariumDepromere" type="button" class="btn btn-primary col-auto">Itiner&amacr;rium Praestentem D&emacr;pr&omacr;mere</button>
-				<button id="itinerariumVacuefacere" type="button" class="btn btn-primary col-auto">Dies Veneris Venit</button>
+				<button id="itinerariumVacuefacere" type="button" class="btn btn-primary col-auto">Itiner&amacr;rium Vacuefac<</button>
+
+				<button id="itinerariaTypisExprimere" type="button" class="btn btn-primary col-auto">Cre&amacr; Indicem Expressi&omacr;nis Typ&imacr;s</button>
 			<div>
 			<div>
 				<ul class="container list-group list-group-horizontal" >

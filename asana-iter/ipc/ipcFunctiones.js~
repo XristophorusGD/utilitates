@@ -955,6 +955,58 @@ exports.itinerariumRestituere = async (e) =>
  * ||    \\_// || \||  \\__   ||   ||  \\_//
  *
  * functio************************************
+ * Title: itinerariaTypisExprimere
+ * Descriptio: Fenestellam legat qua ûsuârius itinerâria exprimenda êligit diêbus scribendô
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+exports.itinerariaTypisExprimere = async () =>
+{
+	await fenestellae.fenestellaTypisExprimendi.utiFenestella();
+}
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: indicem-creare
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+exports.indicemCreare = async () =>
+{
+	//
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: noli-indicem-creare
+ * Descriptio: Fenestellam quâ indicem itinerâriôrum creâtur tollit                                                  * Intus: nil
+ * Exitus: nil
+ */
+
+exports.noliIndicemCreare = async () =>
+{
+	await fenestellae.fenestellaTypisExprimendi.relinquereFenestellam();
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
  * Title: comprobareHoram
  * Descriptio: Comprobat an itinerâria praeterita nîmis vetera sint. Sî sunt, indicem itinerâriôrum faciendôrum reddit
  * Exitus: index itinerâriôrum faciendôrum
