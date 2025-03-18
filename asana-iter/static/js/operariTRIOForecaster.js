@@ -42,7 +42,9 @@ window.Asana.ad("itinerarium-restituere")
 function statusPicturae(statusTabularum)
 {
 	const materia = document.querySelector("body")
-	const globuli = document.querySelectorAll("button");
+	const globuli = document.querySelectorAll("button")
+
+	console(statusTabularum.praesensAbest)
 
 	if(statusTabularum.diesLunae)
 	{

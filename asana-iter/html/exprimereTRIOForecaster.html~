@@ -12,12 +12,12 @@
 		<form>
 		<div class="form-check">
 			<div>
-				<input class="form-check-input" type="radio" name="genusExpressionis" id="intervallaTypisExprimere" value="intervalla-typis-exprimere" />
+				<input class="form-check-input" type="radio" name="genusExpressionis" id="intervallaTypisExprimere" value="intervalla-typis-exprimere" checked/>
 				<label class="form-check-label" for="intervallaTypisExprimere"> Date Range </label>
 				<div name="formula-typis-exprimendi">
-					<input type="date" name="diesPrimumExpressionis" id="diesPrimumExpressionis" />
+					<input type="date" name="diesPrimusExpressionis" id="diesPrimusExpressionis" />
 					<label class="form-check-label" for="diesPrimum"> Start Date </label>
-					<input type="date" name="diesUltimumExpressionis" id="diesUltimumExpressionis" />
+					<input type="date" name="diesUltimusExpressionis" id="diesUltimusExpressionis" />
 					<label class="form-check-label" for="diesPrimum"> End Date </label>
 				</div>
 			</div>

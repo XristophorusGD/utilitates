@@ -1,4 +1,14 @@
 let radioGlobuli = document.querySelectorAll("input[name=genusExpressionis]")
+
+document.querySelector("#diesPrimusExpressionis").value = "2024-09-01"
+let hodie = new Date();
+document.querySelector("#diesUltimusExpressionis").value = (new Date(
+	hodie.getTime()-((hodie.getTimezoneOffset())*60*1000))).toISOString().
+	split("T")[0]
+
+
+
+
 radioGlobuli.forEach((globulus) =>
 {
 	document.querySelector("#"+globulus.id).addEventListener("change", 
@@ -9,7 +19,6 @@ radioGlobuli.forEach((globulus) =>
 
 			radioGlobuli.forEach((intus) =>
 			{
-				console.log(intus.value)
 				let formulaeIntus = document.querySelector("#"+intus.id)
 				let formulae = formulaeIntus.
 					parentElement.querySelector("div[name=formula-typis-exprimendi]")
@@ -31,8 +40,24 @@ noliIndicemCreare.addEventListener("click", (e) =>
 })
 
 let indicemCreare = document.querySelector("form");
+
 indicemCreare.addEventListener("submit", (e) =>
 {
 	//eligere
-	window.Asana.ad("indicem-creare")
+	e.preventDefault();
+
+	let data = Object.fromEntries(
+		new FormData(e.target)
+	)
+	if(data["genusExpressionis"] == "intervalla-typis-exprimere")
+	{
+		let diesPrimus  = new Date(data["diesPrimusExpressionis"])
+		let diesUltimus = new Date(data["diesUltimusExpressionis"])
+		window.Asana.ad(data["genusExpressionis"], {"diesPrimus": diesPrimus, "diesUltimus": diesUltimus});
+	}
+	else
+	{
+		window.Asana.ad(data["genusExpressionis"], data["expressionisFormula"]);
+	}
+
 })

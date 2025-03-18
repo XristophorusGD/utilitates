@@ -25,6 +25,7 @@ const path = require('path');
 const fs = require('fs');
 const docx = require('docx');
 const Asana = require('asana');
+const createDesktopShortcuts = require("create-desktop-shortcuts")
 const fenestellae = require("../js/fenestellae");
 const axiosOauthAsana = require("axios");
 const axiosIOA = require("../elaboratorium/interceptAxiosOauthAsana");
@@ -965,6 +966,7 @@ exports.itinerariaTypisExprimere = async () =>
 }
 
 
+
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
  * ||    || || ||\ ||  //   | || | ||  // \\
@@ -972,15 +974,71 @@ exports.itinerariaTypisExprimere = async () =>
  * ||    \\_// || \||  \\__   ||   ||  \\_//
  *
  * functio************************************
- * Title: indicem-creare
+ * Title: singularia-typis-exprimere
  * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
  * Intus: nil
  * Exitus: nil
  */
 
-exports.indicemCreare = async () =>
+exports.singulariaTypisExprimere = async (e, formula) =>
 {
-	//
+
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+exports.intervallaTypisExprimere = async (e, dierumIntervallum) =>
+{
+	let diesPrimus = diesLunae(dierumIntervallum["diesPrimus"], 0)
+	let diesUltimus = diesLunae(dierumIntervallum["diesUltimus"], 0)
+
+	if (diesUltimus < diesPrimus)
+	{
+		console.log("Error")
+		//error
+	}
+	else
+	{
+
+		let expressionisLocus = locusTypisExpressionis();
+		while (diesPrimus <= diesUltimus)
+		{
+			let itinerisScapus = iterpath(".docx", diesPrimus)
+			console.log(diesPrimus)
+
+			const aditusDirectus = createDesktopShortcuts({
+				windows:
+				{
+					filepath: itinerisScapus,
+					outputPath: expressionisLocus,
+				},
+				linux:
+				{
+					filepath: itinerisScapus,
+					outputPath: expressionisLocus
+				},
+				osx:
+				{
+					filepath: itinerisScapus,
+					outputPath: expressionisLocus
+				}
+			})
+
+
+			diesPrimus = diesLunae(diesPrimus, 1)
+	
+		}
+	}
 }
 
 /*
@@ -1555,12 +1613,77 @@ async function asanaeSectiones()
  * ||    \\_// || \||  \\__   ||   ||  \\_//
  *
  * functio************************************
- * Title: iterpath
+ * Title: locusTypisExpressionis
  * Descriptio: Consequî sectiones hûius Project Asanae
  * Intus:
  *      (o) filetype - genus scapî ad quod itinerârium servandum
  *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
  * Exitus: nil
+ */
+function locusTypisExpressionis(nomenExpr)
+{
+
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let nunc = new Date()
+	let annus = nunc.getFullYear();
+	let monthNum = nunc.getMonth();
+	let diesNum = nunc.getDay();
+
+	let nomen = annus+"_"+menses[monthNum]+"_"+diesNum;
+	//computa annum fiscalem
+	if (nomenExpr)
+	{
+		nomen = nomenExpr
+	}
+
+	const exprTypis_dir = [
+	".print_jobs",
+	nomen];
+
+
+	const exprTypis_scapus = exprTypis_dir.join("/");
+
+
+	console.log("ExpressionisNomen:" + nomen)
+	let latestFound = false;
+	let version = 1;
+	versionSuffix = "_v" + version + "/";
+
+	while(!latestFound)
+	{
+		versionSuffix = "_v" + version + "/";
+		latestFound = !(fs.existsSync(exprTypis_scapus+versionSuffix));
+		version++;
+	}
+
+	fs.mkdirSync(exprTypis_scapus+versionSuffix, {recursive: true});
+
+		return exprTypis_scapus+versionSuffix;
+}
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: iterpath
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) filetype - genus scapî ad quod itinerârium servandum
+ *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
+ * Exitus:
+ * 	(o) genere scapî solûtô, locus ubi itinerâria servanda
+ * 	(o) genus json datô, locus itinerâriî json
+ * 	(o) genus docx datô,
+ * 	    (o) locus novissimus - locus itinerâriî generis docx servandî
+ * 	    (o) locus praesens - locus itinerâriî iam novê servantî (et legendî)
  */
 function iterpath(filetype, refdies)
 {

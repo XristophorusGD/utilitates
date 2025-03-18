@@ -150,13 +150,28 @@ app.on('window-all-closed', async (e)=>
  * ||    \\_// || \||  \\__   ||   ||  \\_//
  *
  * functio************************************
- * Title: indicem-creare
+ * Title: singularia-typis-exprimere
  * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
  * Intus: nil
  * Exitus: nil
  */
 
-ipcMain.on("indicem-creare", ipcFunctiones.indicemCreare)
+ipcMain.on("singularia-typis-exprimere", ipcFunctiones.singulariaTypisExprimere)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("intervalla-typis-exprimere", ipcFunctiones.intervallaTypisExprimere)
 
 
 
