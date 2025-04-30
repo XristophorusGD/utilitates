@@ -105,9 +105,7 @@ exports.aditusAdAsanam = async (e) =>
 exports.pqsmeMongo = async (e, auctoritasMongo) =>
 {
 	const TESSERA_MONGO_DECOCTA = "f8ffbd4b02bb04d107869211a36c342a24a71404856fb6f020484dcf4069b028"
-
-
-
+	console.log("PQSME NUNCCCC")
 	if (crypto.timingSafeEqual(
 		Buffer.from(TESSERA_MONGO_DECOCTA),
 		Buffer.from(crypto.createHash("sha256").update(auctoritasMongo.tesseraMongoDB).digest('hex')
@@ -1633,7 +1631,7 @@ function locusTypisExpressionis(nomenExpr)
 	let monthNum = nunc.getMonth();
 	let diesNum = nunc.getDay();
 
-	let nomen = annus+"_"+menses[monthNum]+"_"+diesNum;
+	let nomen = annus+"_"+(monthNum+1)+menses[monthNum]+"_"+diesNum;
 	//computa annum fiscalem
 	if (nomenExpr)
 	{
@@ -1655,9 +1653,9 @@ function locusTypisExpressionis(nomenExpr)
 
 	while(!latestFound)
 	{
-		version++;
 		versionSuffix = "_v" + version + "/";
 		latestFound = !(fs.existsSync(exprTypis_scapus+versionSuffix));
+		version++;
 	}
 
 	fs.mkdirSync(exprTypis_scapus+versionSuffix, {recursive: true});
@@ -1742,7 +1740,7 @@ function iterpath(filetype, refdies)
 		while(!latestFound)
 		{
 			version++;
-			versionSuffix = "_v" + version + filetype;
+			versionSuffix = "_v" + version + filetype 	;
 			latestFound = !(fs.existsSync(iterfile+versionSuffix));
 		}
 		if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}

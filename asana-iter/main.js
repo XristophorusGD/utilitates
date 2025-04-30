@@ -15,7 +15,7 @@
 const { app, ipcMain } = require('electron');
 const ngrok = require("@ngrok/ngrok");
 const path = require('path');
-const ipcFunctiones = require('./ipc/ipcFunctiones');
+const ipcFunctiones = require('./ipc/ipcFunctionesII');
 const express = require('express');
 const Asana = require('asana');
 const dirWebhk = require('./elaboratorium/directoria/webhookDirectorium');
@@ -37,7 +37,7 @@ elaboratorium.use(dirOperari);
 // Data
 const VERVM = true;
 const FALVSM = false;
-const ostiolum = 3000;
+const ostiolum = 4000;
 
 /**incertae =============================================================================================           
  *      _    _____ ____      _    _____   ___ _   _  ____ _____ ____ _____  _    _____ 
@@ -53,7 +53,7 @@ let aditusadrete; //forte periculosum-
 app.whenReady().then(async () =>
 {
 	elaboratorium.listen(ostiolum, () => {
-		console.log (`elaboratorium exspectat ostiolo http://localhost:${ostiolum}`)
+		console.log (`elaboratorium exspectat ostiolo: http://localhost:${ostiolum}`)
 	})
 
 	elaboratorium.use(express.json());
@@ -62,12 +62,12 @@ app.whenReady().then(async () =>
 	{
 		addr: ostiolum,
 		authtoken: "2kOMN9Rlf4ak6eO4phexfkLykTs_832Tme7AGJ6WcPJAAwi2S",
-		//oauth_provider: "google",
-		//oauth_allow_emails: "chdavis1@ualr.edu",
-		//oauth_allow_domains: "ualr.edu"
+		oauth_provider: "google",
+		oauth_allow_emails: "chdavis1@ualr.edu",
+		oauth_allow_domains: "ualr.edu"
 	});
 
-	console.log (`elaboratorium exspectat loco:${aditusadrete.url()}`)
+	console.log (`elaboratorium exspectat loco:    ${aditusadrete.url()}`)
 	console.log("Emissio ab elaboratorio Asanae constituitur")
 
 	//TEMPORALIA: melius habêre locum rêtiâlem constantem ut aliî ûsuâriî aditum habeant ad
@@ -141,7 +141,66 @@ app.on('window-all-closed', async (e)=>
 
 })
 
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: itinerarium-vacuefacere-gradusii
+ * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
+ * Intus: nil
+ * Exitus: nil
+ */
 
+ipcMain.on("itinerarium-vacuefacere-gradusii", ipcFunctiones.itinerariumVacuefacereGradusII)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intinerarium-vacuefacere-gradusi
+ * Descriptio: petit an usuarius vere itiner¿rium vacuefacere vellit
+ * Intus: nil
+ * Exitus: nil:
+ */
+
+ipcMain.on("itinerarium-vacuefacere-gradusi", ipcFunctiones.itinerariumVacuefacereGradusI)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: claudit fenestell¿s quibus itinerarium vacuum fit
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("noli-itinerarium-vacuefacere", ipcFunctiones.noliItinerariumVacuefacere)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerarium-novum-volo
+ * Descriptio: confirm¿ti¿nem itiner¿rium vacuefaciend¿ coepit
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itinerarium-novum-volo", ipcFunctiones.itinerariumNovumVolo)
 
 /*
  *  ____ __ __ __  __   ___ ______ __   ___
@@ -207,20 +266,6 @@ ipcMain.on("noli-indicem-creare", ipcFunctiones.noliIndicemCreare)
 ipcMain.on("itineraria-typis-exprimere", ipcFunctiones.itinerariaTypisExprimere)
 
 
-/*
- *  ____ __ __ __  __   ___ ______ __   ___  
- * ||    || || ||\ ||  //   | || | ||  // \\ 
- * ||==  || || ||\\|| ((      ||   || ((   ))
- * ||    \\_// || \||  \\__   ||   ||  \\_// 
- *                                          
- * functio************************************
- * Title: itinerarium-restituere
- * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
- * Intus: nil
- * Exitus: nil
- */
-
-ipcMain.on("itinerarium-restituere", ipcFunctiones.itinerariumRestituere)
 
 /*
  *  ____ __ __ __  __   ___ ______ __   ___  

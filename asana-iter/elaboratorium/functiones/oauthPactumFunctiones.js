@@ -20,10 +20,8 @@ require('dotenv').config();
 // Data
 const VERVM = true;
 const FALSVM = false;
-
 exports.responsum = (petitum, responsum) =>
 {
-	console.log(petitum.query.state)
 	if(petitum.query.state !== petitum.signedCookies.statusOauth)
 	{
 		responsum.status(422).send("Stat&#363;s n&#333;n &#299;dem sunt");
@@ -31,11 +29,8 @@ exports.responsum = (petitum, responsum) =>
 	}
 	else
 	{
-		console.log('\u0101')
-		console.log("****** Tessera permutanda tessera open authentication et status responsî agnitiônis usuarii:\n"
+		console.log("*** Tessera permutanda eA openauthentication et status responsI agnitiOnis usuariI:\n"
 		)
-		console.log(`tessera: ${petitum.query.code}`)
-		console.log(`status: ${petitum.query.state}\n`)
 
 		responsum.sendFile(path.join(__dirname, "../..","static/html/mongoDBPQSME.html"))
 	}
@@ -53,7 +48,7 @@ exports.salvareOauth = async (petitum, responsum) =>
 	const arces = await repoDatorum.consequiCongeriem('arx')
 	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
 	console.log("salvare")
-	console.log(petitum.query)
+
 	const materia =
 	{
 		grant_type: "authorization_code",
@@ -73,13 +68,12 @@ exports.salvareOauth = async (petitum, responsum) =>
 	.post("https://app.asana.com/-/oauth_token", materia, constitutio)
 	.then((responsum) =>
 	{
-		console.log("Responsum conâtui permutandî signa\n")
-		console.log(responsum.data)
+		console.log("OAuth tessera nObIs\n")
 		return responsum.data
 	})
 	.then( async (data) =>
 	{
-		//TEMPORALIA: melius est servâre in repositôriô datôrum
+		//TEMPORALIA: melius est servÃ¢re in repositÃ´riÃ´ datÃ´rum
 
 		let client = Asana.ApiClient.instance;
 		let token = client.authentications['token'];
@@ -99,16 +93,15 @@ exports.salvareOauth = async (petitum, responsum) =>
 exports.agnoscere = (petitum, responsum) =>
 {
 	let statusOauth = uuidv4();
-	//Status servâtur inter aerâs rêtiâlês ut rursum ûsuârium eô ûtâtur
-	//Sîc facilius constitutur aetâs aerae ipsîus
-	//Quârê utendum êlaboratrum rêtiâle
+	//Status servÃ¢tur inter aerÃ¢s rÃªtiÃ¢lÃªs ut rursum Ã»suÃ¢rium eÃ´ Ã»tÃ¢tur
+	//SÃ®c facilius constitutur aetÃ¢s aerae ipsÃ®us
+	//QuÃ¢rÃª utendum Ãªlaboratrum rÃªtiÃ¢le
 	responsum.cookie("statusOauth", statusOauth,
 	{
 		maxAge: 1000*60*5,
 		signed: VERVM
 	});
-
-	//statu oauth creato, adimus ad paginam agnitiônis Asana
+	//statu oauth creato, adimus ad paginam agnitiÃ´nis Asana
 	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&state=${statusOauth}`);
 }
 

@@ -1,0 +1,396 @@
+/* Architectus adnotationes
+**immutabiles instrumenta ====================================================================================
+*      _    _____ ____      _    _____   ___ __  __ __  ____     _______  _    ____ ___ _     _____ ____
+*     / \  | ____|  _ \    / \  | ____| |_ _|  \/  |  \/  \ \   / /_   _|/ \  | __ )_ _| |   | ____/ ___|
+*    / _ \ |  _| | |_) |  / _ \ |  _|    | || |\/| | |\/| |\ \ / /  | | / _ \ |  _ \| || |   |  _| \___ \
+*   / ___ \| |___|  _ <  / ___ \| |___   | || |  | | |  | | \ V /   | |/ ___ \| |_) | || |___| |___ ___) |
+*  /_/   \_\_____|_| \_\/_/   \_\_____| |___|_|  |_|_|  |_|  \_/    |_/_/   \_\____/___|_____|_____|____/
+*/
+
+const {BrowserWindow} = require('electron');
+const Asana = require('asana');
+const path = require('path');
+const axios = require('axios');
+const repositorium = require('../repositorium_datorum/repositorium');
+
+/*
+ *
+ *  _______  _______ __  __ ____  _        _    ____  
+ * | ____\ \/ / ____|  \/  |  _ \| |      / \  |  _ \ 
+ * |  _|  \  /|  _| | |\/| | |_) | |     / _ \ | |_) |
+ * | |___ /  \| |___| |  | |  __/| |___ / ___ \|  _ < 
+ * |_____/_/\_\_____|_|  |_|_|   |_____/_/   \_\_| \_\
+ *                                                         
+ * exemplar*************************************
+ * Title: fenestellaPQSME
+ * Descriptio: Constituit novam fenestellam quâ probâtur ûsuârius quem significet sê esse
+ * Intus:  nullus
+ * Exitus: nullus
+ */
+
+class fenestellaPQSME
+{
+	static #simulacrum;
+	static #fenestella;
+	static #seConstituit = false;
+	static #pagina = path.join(__dirname, "..","/html/index.html");
+	static #mensurae = [800,600]
+
+	constructor()
+	{
+		if (!fenestellaPQSME.#seConstituit)
+		{
+			throw new TypeError("functione new simulacrum non creatur")
+		}
+		else
+		{
+			console.log("Fenestella PQSME creatum")
+		}
+	}
+	static #estneFenestella()
+	{
+		return this.#fenestella !== undefined;
+	}
+
+
+	async #initialize()
+	{
+		try
+		{
+			console.log("Nova fenestella aperitur")
+			console.log(__dirname)
+			fenestellaPQSME.#fenestella = new BrowserWindow(
+				{
+			                width:  fenestellaPQSME.#mensurae[0],
+			                height: fenestellaPQSME.#mensurae[1],
+			                webPreferences:
+					{
+						nodeIntegration: false,
+						contextIsolation: true,
+						enableRemoteModule:false,
+						sandbox: true,
+						preload: path.join(__dirname, ".." ,"preload.js")
+					}
+			        })
+
+	        	fenestellaPQSME.#fenestella.loadFile(fenestellaPQSME.#pagina)
+		}
+		catch(error)
+		{
+			console.log(error)
+		}
+	}
+
+	static utiFenestella()
+	{
+		console.log("Utens fenestella PQSME")
+		return new Promise(async (solutum, falsum) =>
+		{
+			if(!fenestellaPQSME.#estneFenestella())
+			{
+				fenestellaPQSME.#seConstituit = true;
+				fenestellaPQSME.#simulacrum = new fenestellaPQSME();
+				await fenestellaPQSME.#simulacrum.#initialize()
+			}
+			solutum(fenestellaPQSME.#fenestella)
+		})
+	}
+
+	static relinquereFenestellam()
+	{
+		fenestellaPQSME.#fenestella.close();
+		fenestellaTypisExprimendi.#simulacrum = undefined;
+		fenestellaTypisExprimendi.#fenestella = undefined;
+		fenestellaTypisExprimendi.#seConstituit = false;
+	}
+}
+
+
+/*
+ *
+ *  _______  _______ __  __ ____  _        _    ____  
+ * | ____\ \/ / ____|  \/  |  _ \| |      / \  |  _ \ 
+ * |  _|  \  /|  _| | |\/| | |_) | |     / _ \ | |_) |
+ * | |___ /  \| |___| |  | |  __/| |___ / ___ \|  _ < 
+ * |_____/_/\_\_____|_|  |_|_|   |_____/_/   \_\_| \_\
+ *                                                         
+ * exemplar*************************************
+ * Title: fenestellaDescriberePensum
+ * Descriptio: Constituit novam fenestellam quâ probâtur ûsuârius quem significet sê esse
+ * Intus:  nullus
+ * Exitus: nullus
+ */
+
+class fenestellaTypisExprimendi
+{
+	static #simulacrum;
+	static #fenestella;
+	static #seConstituit = false;
+	static #pagina = path.join(__dirname, "..","/html/exprimereTRIOForecaster.html");
+//	static #pagina = path.join("/static/htmladderePensumAsana.html");
+	static #mensurae = [450,250]
+
+	constructor()
+	{
+		if (!fenestellaTypisExprimendi.#seConstituit)
+		{
+			throw new TypeError("functione new simulacrum non creatur")
+		}
+		else
+		{
+			console.log("Fenestella qua index itinerariorum typis exprimendorum creata")
+		}
+	}
+	static #estneFenestella()
+	{
+		return this.#fenestella !== undefined;
+	}
+
+
+	async #initialize(eCongeries)
+	{
+		try
+		{
+			fenestellaTypisExprimendi.#fenestella = new BrowserWindow(
+				{
+
+					alwaysOnTop: true,
+					frame: false,
+					resizable: false,
+			                width:  fenestellaTypisExprimendi.#mensurae[0],
+			                height: fenestellaTypisExprimendi.#mensurae[1],
+			                webPreferences:
+					{
+						nodeIntegration: false,
+						contextIsolation: true,
+						enableRemoteModule:false,
+						sandbox: true,
+						preload: path.join(__dirname, "..","preload.js")
+					}
+			        })
+
+				fenestellaTypisExprimendi.#fenestella.loadFile(fenestellaTypisExprimendi.#pagina)
+		}
+		catch(error)
+		{
+			console.log(error)
+		}
+	}
+
+	static utiFenestella(eCongeries)
+	{
+		return new Promise(async (solutum, falsum) =>
+		{
+			if(!fenestellaTypisExprimendi.#estneFenestella())
+			{
+				fenestellaTypisExprimendi.#seConstituit = true;
+				fenestellaTypisExprimendi.#simulacrum = new fenestellaTypisExprimendi();
+				await fenestellaTypisExprimendi.#simulacrum.#initialize(eCongeries)
+			}
+			solutum(fenestellaTypisExprimendi.#fenestella)
+		})
+	}
+
+	static relinquereFenestellam()
+	{
+		fenestellaTypisExprimendi.#fenestella.close();
+		fenestellaTypisExprimendi.#simulacrum = undefined;
+		fenestellaTypisExprimendi.#fenestella = undefined;
+		fenestellaTypisExprimendi.#seConstituit = false;
+	}
+}
+
+/*
+ *
+ *  _______  _______ __  __ ____  _        _    ____  
+ * | ____\ \/ / ____|  \/  |  _ \| |      / \  |  _ \ 
+ * |  _|  \  /|  _| | |\/| | |_) | |     / _ \ | |_) |
+ * | |___ /  \| |___| |  | |  __/| |___ / ___ \|  _ < 
+ * |_____/_/\_\_____|_|  |_|_|   |_____/_/   \_\_| \_\
+ *                                                         
+ * exemplar*************************************
+ * Title: fenestellaItinerariumVacuefaciendiGII
+ * Descriptio: Constituit novam fenestellam qu¿ prob¿tur an ¿su¿rius v¿r¿ vult itiner¿rium vacuefacere
+ * Intus:  nullus
+ * Exitus: nullus
+ */
+
+class fenestellaItinerariumVacuefaciendiGII
+{
+	static #simulacrum;
+	static #fenestella;
+	static #seConstituit = false;
+	static #pagina = path.join(__dirname, "..","/html/itinerariumVacuefacereGII.html");
+//	static #pagina = path.join("/static/htmladderePensumAsana.html");
+	static #mensurae = [250,150]
+
+	constructor()
+	{
+		if (!fenestellaItinerariumVacuefaciendiGII.#seConstituit)
+		{
+			throw new TypeError("functione new simulacrum non creatur")
+		}
+		else
+		{
+			console.log("Fenestella qua index itinerariorum vere vacuefit creata")
+		}
+	}
+	static #estneFenestella()
+	{
+		return this.#fenestella !== undefined;
+	}
+
+
+	async #initialize(eCongeries)
+	{
+		try
+		{
+			fenestellaItinerariumVacuefaciendiGII.#fenestella = new BrowserWindow(
+				{
+
+					alwaysOnTop: true,
+					frame: false,
+					resizable: false,
+			                width:  fenestellaItinerariumVacuefaciendiGII.#mensurae[0],
+			                height: fenestellaItinerariumVacuefaciendiGII.#mensurae[1],
+			                webPreferences:
+					{
+						nodeIntegration: false,
+						contextIsolation: true,
+						enableRemoteModule:false,
+						sandbox: true,
+						preload: path.join(__dirname, "..","preload.js")
+					}
+			        })
+
+				fenestellaItinerariumVacuefaciendiGII.#fenestella.loadFile(fenestellaItinerariumVacuefaciendiGII.#pagina)
+		}
+		catch(error)
+		{
+			console.log(error)
+		}
+	}
+
+	static utiFenestella(eCongeries)
+	{
+		return new Promise(async (solutum, falsum) =>
+		{
+			if(!fenestellaItinerariumVacuefaciendiGII.#estneFenestella())
+			{
+				fenestellaItinerariumVacuefaciendiGII.#seConstituit = true;
+				fenestellaItinerariumVacuefaciendiGII.#simulacrum = new fenestellaItinerariumVacuefaciendiGII();
+				await fenestellaItinerariumVacuefaciendiGII.#simulacrum.#initialize(eCongeries)
+			}
+			solutum(fenestellaItinerariumVacuefaciendiGII.#fenestella)
+		})
+	}
+
+	static relinquereFenestellam()
+	{
+		fenestellaItinerariumVacuefaciendiGII.#fenestella.close();
+		fenestellaItinerariumVacuefaciendiGII.#simulacrum = undefined;
+		fenestellaItinerariumVacuefaciendiGII.#fenestella = undefined;
+		fenestellaItinerariumVacuefaciendiGII.#seConstituit = false;
+	}
+}
+/*
+ *
+ *  _______  _______ __  __ ____  _        _    ____  
+ * | ____\ \/ / ____|  \/  |  _ \| |      / \  |  _ \ 
+ * |  _|  \  /|  _| | |\/| | |_) | |     / _ \ | |_) |
+ * | |___ /  \| |___| |  | |  __/| |___ / ___ \|  _ < 
+ * |_____/_/\_\_____|_|  |_|_|   |_____/_/   \_\_| \_\
+ *                                                         
+ * exemplar*************************************
+ * Title: fenestellaItinerariumVacuefaciendiGI
+ * Descriptio: Constituit novam fenestellam quâ probâtur ûsuârius itiner¿rium vacuefacere
+ * Intus:  nullus
+ * Exitus: nullus
+ */
+
+class fenestellaItinerariumVacuefaciendiGI
+{
+	static #simulacrum;
+	static #fenestella;
+	static #seConstituit = false;
+	static #pagina = path.join(__dirname, "..","/html/itinerariumVacuefacereGI.html");
+//	static #pagina = path.join("/static/htmladderePensumAsana.html");
+	static #mensurae = [250,150]
+
+	constructor()
+	{
+		if (!fenestellaItinerariumVacuefaciendiGI.#seConstituit)
+		{
+			throw new TypeError("functione new simulacrum non creatur")
+		}
+		else
+		{
+			console.log("Fenestella qua index itinerariorum vacuefit creata")
+		}
+	}
+	static #estneFenestella()
+	{
+		return this.#fenestella !== undefined;
+	}
+
+
+	async #initialize(eCongeries)
+	{
+		try
+		{
+			fenestellaItinerariumVacuefaciendiGI.#fenestella = new BrowserWindow(
+				{
+
+					alwaysOnTop: true,
+					frame: false,
+					resizable: false,
+			                width:  fenestellaItinerariumVacuefaciendiGI.#mensurae[0],
+			                height: fenestellaItinerariumVacuefaciendiGI.#mensurae[1],
+			                webPreferences:
+					{
+						nodeIntegration: false,
+						contextIsolation: true,
+						enableRemoteModule:false,
+						sandbox: true,
+						preload: path.join(__dirname, "..","preload.js")
+					}
+			        })
+
+				fenestellaItinerariumVacuefaciendiGI.#fenestella.loadFile(fenestellaItinerariumVacuefaciendiGI.#pagina)
+		}
+		catch(error)
+		{
+			console.log(error)
+		}
+	}
+
+	static utiFenestella(eCongeries)
+	{
+		return new Promise(async (solutum, falsum) =>
+		{
+			if(!fenestellaItinerariumVacuefaciendiGI.#estneFenestella())
+			{
+				fenestellaItinerariumVacuefaciendiGI.#seConstituit = true;
+				fenestellaItinerariumVacuefaciendiGI.#simulacrum = new fenestellaItinerariumVacuefaciendiGI;
+				await fenestellaItinerariumVacuefaciendiGI.#simulacrum.#initialize(eCongeries)
+			}
+			solutum(fenestellaItinerariumVacuefaciendiGI.#fenestella)
+		})
+	}
+
+	static relinquereFenestellam()
+	{
+		fenestellaItinerariumVacuefaciendiGI.#fenestella.close();
+		fenestellaItinerariumVacuefaciendiGI.#simulacrum = undefined;
+		fenestellaItinerariumVacuefaciendiGI.#fenestella = undefined;
+		fenestellaItinerariumVacuefaciendiGI.#seConstituit = false;
+	}
+}
+module.exports =
+{
+
+	fenestellaItinerariumVacuefaciendiGII: fenestellaItinerariumVacuefaciendiGII,
+	fenestellaItinerariumVacuefaciendiGI: fenestellaItinerariumVacuefaciendiGI,
+	fenestellaPQSME: fenestellaPQSME,
+	fenestellaTypisExprimendi: fenestellaTypisExprimendi
+}

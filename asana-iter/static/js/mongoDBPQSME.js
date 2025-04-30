@@ -1,29 +1,52 @@
-MONGO_TESSERA_DECOCTA="f8ffbd4b02bb04d107869211a36c342a24a71404856fb6f020484dcf4069b028"
 
 document.querySelector('form').addEventListener('submit', (e) =>
 {
 	e.preventDefault();
+
 	let data = Object.fromEntries(
 		new FormData(e.target)
 	)
 	data['usuarium'] = "trioCivisI"
 	const urlParams = new URLSearchParams(window.location.search)
-
 	data['tesseraPetitionis'] = urlParams.get('code')
 	window.Asana.ad("pqsme-mongo-oauth", data)
 	})
 
+document.querySelector("#tesseraMongoDB").addEventListener("blur", (e) =>
+{
+	const tesseraeQuadratum = document.querySelector("#tesseraMongoDB")
+	if(tesseraeQuadratum.classList.contains("is-invalid"))
+	{
+			tesseraeQuadratum.classList.remove("is-invalid")
+	}
+})
+
+
+document.querySelector("#tesseraMongoDB").addEventListener("focus", (e) =>
+{
+	const tesseraeQuadratum = document.querySelector("#tesseraMongoDB")
+	if(tesseraeQuadratum.classList.contains("is-invalid"))
+	{
+			tesseraeQuadratum.classList.remove("is-invalid")
+	}
+})
 window.Asana.ab("mongodb-ignotum", ()=>
 	{
-		        console.log("Tessera non est")
-
+		const tesseraeQuadratum = document.querySelector("#tesseraMongoDB")
+	        console.log("Tessera non est")
+		if(!tesseraeQuadratum.classList.contains("is-invalid"))
+		{
+			tesseraeQuadratum.classList.add("is-invalid")
+		}
 	})
+
 window.Asana.ab("mongodb-notum", ()=>
 	{
 		const urlParams = new URLSearchParams(window.location.search)
 		console.log ("PQSME ad Mongo")
 		let tessera = urlParams.get('code');
-		document.location.href=`http://localhost:3000/oauth/rectum-pqsme/?code=${tessera}`
+		window.Asana.ad("aditus-ad-asanam")
+		document.location.href=`http://localhost:4000/oauth/rectum-pqsme/?code=${tessera}`
 	})
 /*window.Asana.ab("oauth-aditus-asanae", (tesseraAditus)=>
 {

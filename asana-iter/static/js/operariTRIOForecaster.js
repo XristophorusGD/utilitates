@@ -1,9 +1,15 @@
-window.Asana.ad("aditum-ad-asanam")
+window.Asana.ad("aditus-ad-asanam")
+
+document.querySelector('#itinerariumVacuefacere').addEventListener('click', (e) =>
+{
+	window.Asana.ad("itinerarium-novum-volo")
+})
+
 document.querySelector('#itinerariaTypisExprimere').addEventListener('click', (e) =>
 {
 	window.Asana.ad("itineraria-typis-exprimere")
-}
-)
+})
+
 document.querySelector('#itinerariumDepromere').addEventListener('click', (e) =>
 {
 	let dies = new Date()
@@ -37,14 +43,14 @@ window.Asana.ab("expectaturiter", (statusTabularum)=>
 	statusPicturae(statusTabularum)
 }
 )
-window.Asana.ad("itinerarium-restituere")
+
 
 function statusPicturae(statusTabularum)
 {
 	const materia = document.querySelector("body")
 	const globuli = document.querySelectorAll("button")
 
-	console(statusTabularum.praesensAbest)
+	console.log(statusTabularum.praesensAbest)
 
 	if(statusTabularum.diesLunae)
 	{

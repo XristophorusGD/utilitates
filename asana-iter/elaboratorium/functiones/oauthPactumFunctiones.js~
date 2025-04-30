@@ -20,10 +20,11 @@ require('dotenv').config();
 // Data
 const VERVM = true;
 const FALSVM = false;
-
+let hoc = 1
 exports.responsum = (petitum, responsum) =>
 {
-	console.log(petitum.query.state)
+	console.log("PROBA :" + hoc)
+	hoc++;
 	if(petitum.query.state !== petitum.signedCookies.statusOauth)
 	{
 		responsum.status(422).send("Stat&#363;s n&#333;n &#299;dem sunt");
@@ -81,9 +82,9 @@ exports.salvareOauth = async (petitum, responsum) =>
 	{
 		//TEMPORALIA: melius est servâre in repositôriô datôrum
 
-		let client = Asana.ApiClient.instance;
-		let token = client.authentications['token'];
-		token.accessToken = data.access_token;
+		//let client = Asana.ApiClient.instance;
+		//let token = client.authentications['token'];
+		//token.accessToken = data.access_token;
 		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {aditusclavis: data.access_token}})
 		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {novusaditus: data.refresh_token}})
 		//responsum.redirect(`../access_token=${data.access_token}`);
@@ -107,7 +108,6 @@ exports.agnoscere = (petitum, responsum) =>
 		maxAge: 1000*60*5,
 		signed: VERVM
 	});
-
 	//statu oauth creato, adimus ad paginam agnitiônis Asana
 	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&state=${statusOauth}`);
 }

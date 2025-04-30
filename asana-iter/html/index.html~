@@ -13,12 +13,12 @@
 			<div class="d-flex justify-content-center">
 				<h1> Vtentiam MongoDB</h1>
 			</div>
-			<div class="col-auto">
-				<button type="submit" class="button mb-3">Proba quis significam me esse (PQSME)</button>
+			<div class="d-grid gap-2">
+			<button type="submit" class="btn btn-primary btn-block">Proba quis significam me esse (PQSME)</button>
 			</div>
 		</div>
 		<div>
-			<ul class="container list-group list-group-horizontal" >
+			<ul class="d-flex list-group list-group-horizontal" >
 				<li class="col-4 list-group-item"> Utimur Node.js <span id="node-version"></span></li>
 				<li class="col-4 list-group-item"> Chromio <span id="chrome-version"></span><li>
 				<li class="col-4 list-group-item">Electro <span id="electron-version"></span><li>

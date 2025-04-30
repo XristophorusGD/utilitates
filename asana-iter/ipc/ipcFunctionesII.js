@@ -1,0 +1,2179 @@
+/* Architectus adnotationes
+ *
+ * Necessse est mihi constituere MangoDB repositôrium ut servem data utenda oauth asana
+ * Nunc necesse est mihi probâre initium permutatiônem signôrum quâ aditus Oauth constituâtur 
+ * -- forte path nôn fungitur
+ * -- index.html mutanda ut per globolum adeat ad /authorization
+ * -- nesciô an adhuc elaborâtrum rêtiâle fungâtur per electron
+ * -- Volô inicere client secret moderâmine et nôn aerâ servâtâ in computâtôriô
+ 
+
+
+
+ **immutabiles instrumenta ====================================================================================
+ *      _    _____ ____      _    _____   ___ __  __ __  ____     _______  _    ____ ___ _     _____ ____  
+ *     / \  | ____|  _ \    / \  | ____| |_ _|  \/  |  \/  \ \   / /_   _|/ \  | __ )_ _| |   | ____/ ___| 
+ *    / _ \ |  _| | |_) |  / _ \ |  _|    | || |\/| | |\/| |\ \ / /  | | / _ \ |  _ \| || |   |  _| \___ \ 
+ *   / ___ \| |___|  _ <  / ___ \| |___   | || |  | | |  | | \ V /   | |/ ___ \| |_) | || |___| |___ ___) |
+ *  /_/   \_\_____|_| \_\/_/   \_\_____| |___|_|  |_|_|  |_|  \_/    |_/_/   \_\____/___|_____|_____|____/ 
+ *                                                         
+ */
+
+// Instrumentorum indices
+const { app, BrowserWindow,ipcMain } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const docx = require('docx');
+const Asana = require('asana');
+const createDesktopShortcuts = require("create-desktop-shortcuts")
+const fenestellae = require("../js/fenestellae");
+const axiosOauthAsana = require("axios");
+const axiosIOA = require("../elaboratorium/interceptAxiosOauthAsana");
+
+axiosOauthAsana.interceptors.response.use(response => response, axiosIOA.oauthInterceptorError);
+
+const repositorium = require('../repositorium_datorum/repositorium');
+const crypto = require("crypto");
+
+// Data
+const SANDBOXMODE = false;
+const VERVM = true;
+const FALVSM = false;
+const client = Asana.ApiClient.instance;
+const token = client.authentications['token'];
+
+/**incertae =============================================================================================           
+ *      _    _____ ____      _    _____   ___ _   _  ____ _____ ____ _____  _    _____ 
+ *     / \  | ____|  _ \    / \  | ____| |_ _| \ | |/ ___| ____|  _ \_   _|/ \  | ____|
+ *    / _ \ |  _| | |_) |  / _ \ |  _|    | ||  \| | |   |  _| | |_) || | / _ \ |  _|  
+ *   / ___ \| |___|  _ <  / ___ \| |___   | || |\  | |___| |___|  _ < | |/ ___ \| |___ 
+ *  /_/   \_\_____|_| \_\/_/   \_\_____| |___|_| \_|\____|_____|_| \_\|_/_/   \_\_____|
+ *                                                                                                                
+ */
+
+let aditusadrete; //forte periculosum-
+
+
+
+
+
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: aditusAdAsanae
+ * Descriptio: Salvat tesseram aditus ad token Asanae
+ * Intus: eventus
+ * Exitus: nullus
+ */
+
+
+exports.aditusAdAsanam = async (e) =>
+{
+	console.log("Asana excitatur")
+
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	const usuariumMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	token.accessToken = usuariumMongo.aditusclavis;
+
+}
+
+
+
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: pqsmeMongo
+ * Descriptio: Proba an datum ûsuâriî nômen et tesseram pertineant ad ûsuârium repositôriî Mongo
+ * Intus: tesseraMongo
+ * Exitus: nil
+ */
+
+
+exports.pqsmeMongo = async (e, auctoritasMongo) =>
+{
+	const TESSERA_MONGO_DECOCTA = "f8ffbd4b02bb04d107869211a36c342a24a71404856fb6f020484dcf4069b028"
+	console.log("PQSME NUNCCCC")
+	if (crypto.timingSafeEqual(
+		Buffer.from(TESSERA_MONGO_DECOCTA),
+		Buffer.from(crypto.createHash("sha256").update(auctoritasMongo.tesseraMongoDB).digest('hex')
+	)))
+	{
+		console.log("Tessera recta!")
+		let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella();
+
+		await repositorium.utiRepositorio(auctoritasMongo)
+		//const arces = await repoDatorum.consequiCongeriem('arx')
+		//const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+		
+		fenPQSME.webContents.send("mongodb-notum")
+			/*const materia =
+			{
+				grant_type: "authorization_code",
+				client_id: process.env.CLIENT_ID,
+				client_secret: usuariusMongo.tacendum_usuarii,
+				redirect_uri: process.env.REDIRECT_URI,
+				code: auctoritasMongo['tesseraPetitionis'],
+			}
+
+
+			const constitutio =
+			{
+				headers:
+				{
+					"content-type": "application/x-www-form-urlencoded"
+				}
+			};
+
+			await axiosOauthAsana.post("https://app.asana.com/-/oauth_token", materia, constitutio)
+				.then((responsum) =>
+				{
+					console.log("Responsum con\u1010tui permutandî signa\n")
+					console.log(responsum.data);
+					return responsum.data;
+				})
+			        .then((data) =>
+				{
+					arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {aditus_oauth: data.access_token}})	
+					arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {novus_aditus_oauth: data.refresh_token}})
+					arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {tessera_petitionis: auctoritasMongo['tesseraPetitionis']}})
+					return data.access_token;
+				})
+				.then((aditusOauth) =>
+				{
+					token.accessToken = aditusOauth;
+					let webhooksApiInstance = new Asana.WebhooksApi();
+					let materia = 
+					{
+						"data":
+						{
+							"filters": 
+							[
+								{
+									"action": "added",
+									"resource_type": "task",
+								}
+							],
+						//"resource": "1207982562429475",
+						"resource": "1207982562429472",
+						"target": aditusadrete.url()+"/emissio/immissio"
+						}
+					}
+					let conditiones = 
+					{
+						"opt_fields": `active,created_at,filters,filters.action,
+						filters.fields,filters.resource_subtype,last_failure_at,
+						last_failure_content,last_success_at,resource,
+						resource.name,target`
+					}
+
+
+					webhooksApiInstance.createWebhook(materia, conditiones).then((exitus) => 
+					{
+						arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {webhook_ID: exitus.data.gid}})	
+						console.log("iniectio prima");
+						console.log(exitus.data)
+						console.log("API vocatur, reddit: " + JSON.stringify(exitus.data, null, 2));
+						utentiaSuscepta = true;
+					}, (error) =>
+					{
+						console.log('Atatatatae!')
+						console.error(error.response.body)
+					});
+					//await new Promise(resolve => setTimeout(resolve, mora));
+
+					//fenPrima.webContents.send("oauth-aditus-asanae", data.access_token);
+				})
+				.catch((error) =>
+				{
+					console.log(error);
+				});*/	
+	}
+	else
+	{
+		console.log("Tessera ignota")
+		let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella()
+		fenPQSME.webContents.send("mongodb-ignotum")
+	}
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: describePensumn
+ * Descriptio: descrîbitur pensum per rês quae pertinent ad data TRIO (genus pensî, beneficiariî, prôpositum sociâle, etc) suscepta ab formulâ
+ * Intus: descrîptiô pensî (exitus formulariae)
+ * Exitus: nil
+ */
+
+
+exports.describePensum = async (e, pensiDescriptio) =>
+{
+        fenestellae.fenestellaDescriberePensum.relinquereFenestellam();
+        let tasksApiInstance = new Asana.TasksApi();
+
+        await tasksApiInstance.getTask(pensiDescriptio['GID']).then(async (exitus) =>
+        {
+		const repoDatorum = await repositorium.utiRepositorio()
+		const arces = await repoDatorum.consequiCongeriem('arx')
+		const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+		let trio_tag =
+		{
+			"beneficiary": pensiDescriptio['beneficiarium'],
+			"objective": pensiDescriptio['propositum'],
+			"permanent": pensiDescriptio['permanetne'],
+			"dayNumber": 1,
+			"tDuration": pensiDescriptio['duration']
+		}
+		// opus est mihi praescriptio quae generat
+		// pensum quae permanet
+		// vel quae adhuc durat
+		let materia =
+		{
+			"data":
+			{
+				"external":
+				{
+					"id" :pensiDescriptio['GID']+"-triotag",
+					"data": JSON.stringify(trio_tag)
+				}
+			}
+		}
+		let optiones =
+		{
+			'opt_fields': "external"
+		}
+		tasksApiInstance.updateTask(materia, pensiDescriptio['GID'], optiones)
+			.then((exitusII) =>
+		{
+			console.log("API recte utimur" + JSON.stringify(exitusII.data, null,2));
+			return exitusII.data
+		}).then((origo) =>
+		{                      
+			for (let i = 1; i < pensiDescriptio['duration'];i++)
+			{
+				materia_simplex =
+				{
+					"data":
+					{
+						"name": origo.name,
+						"projects": origio.projects,
+						"memberships": origo.memberships
+					}
+				}
+				tasksApiInstance.createTask(materia_simplex).then((exitusIII) =>
+				{
+					console.log("API recte utimur" + JSON.stringify(exitusIII.data, null,2));
+				},(error) =>
+				{
+					console.log(error.response.body)
+				});
+			}
+			}).catch((error) =>
+			{
+				console.log(error.response.body)
+			});
+	}, (error)=>
+	{
+		console.error(error.response.body);
+	});
+
+}
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * *******************************************
+ * Title: da-servatum-webhook
+ * Descriptio: Servat signum numerium webhook in aerâ ut deleâtur cum ûtilitâs claudêtur
+ * Intus: signum numerium webhook sessionis
+ * Exitus: nil
+ */
+
+exports.servatumWebhook = (e, webhookIDval) =>
+{
+	webhookID = webhookIDval;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * *******************************************
+ * Title: word-constituere
+ * Descriptio: Constituit scapum .docx in quo inscribuntur pensa asanae
+ * Intus: lunae dies huius septimanae
+ * Exitus: nil
+ */
+
+exports.wordConstituere = async (e, refdies, fluxum=false) => 
+{
+	let sectiones = await asanaeSectiones();
+	let pensa = await asanaePensaSeptimanae(sectiones);
+	let pensorumSingula = await asanaePensorumSingula(pensa);
+	await asanaePensorumGraduus(pensorumSingula);
+
+	console.log("G5/5 - ITINERARIUM CREATUR - Mora erit")
+	
+	let hicLunaeDies = diesLunae(refdies, 0)
+
+	let annus = hicLunaeDies.getFullYear();
+	let mensisNum = hicLunaeDies.getMonth();
+	let lunaeDiesElm = hicLunaeDies.getDate();
+	let currMonthMax = new Date(annus, mensisNum, 0).getDate();
+
+	const dies = ["Monday", "Tuesday", "Wednesday",
+	    "Thursday","Friday", "Saturday", "Sunday"];
+	    
+	    const menses = ["January", "February", "March",
+	    "April", "May", "June", "July", "August",
+	    "September", "October", "November", "December"];
+	    const tnum = 909900090;
+	    const fName = "Christopher";
+	    const lName = "Davis";
+
+	    let programName = ["TALENT SEARCH", "UPWARD BOUND", "EDUCATIONAL OPPORTUNITY CENTER"]
+	    const ualrlogo = new docx.ImageRun({
+		data: fs.readFileSync(path.join(__dirname, "..", "app_imgs/ua-little-rock-h-rgb-01.png")),
+		transformation: {
+		    width: 223,
+		    height: 90,
+		},
+	    });
+
+	    const borderStyle = {
+	      top:{
+		    style: docx.BorderStyle.SINGLE,
+		    size: 5,
+		    color: "#A5A5A5",
+		},
+		bottom: {
+		    style: docx.BorderStyle.SINGLE,
+		    size: 5,
+		    color: "A5A5A5",
+		},
+		left: {
+		    style: docx.BorderStyle.SINGLE,
+		    size: 5,
+		    color: "A5A5A5",
+		},
+		right: {
+		    style: docx.BorderStyle.SINGLE,
+		    size: 5,
+		    color: "A5A5A5",
+		}	
+	    };
+
+	    const iterHeaderText = [
+		  new docx.TextRun({
+		      text: "TRIO",
+		      font: "Humana Sans ITC Std Light",
+		      size: 28,
+		  }),
+		  new docx.TextRun({
+		      text: " | ",
+		      font: "Human Sans ITC Std Light",
+		      size: 28,
+		      color: "ff0000",
+		      bold: true,
+		  }),
+		  new docx.TextRun({
+		      text: programName[2],
+		      font: "Britannic Bold",
+		      size: 28,
+		      characterSpacing: 50,
+		  }),
+		  new docx.TextRun({
+		      text: "Employee Itinerary and Leave Report",
+		      font: "Avenir Next LT Pro Light",
+		      size: 40,
+		  })
+	    ]
+	    const assignTableText = "";
+	    const noteSectionText = "";
+	    const leaveTableText = "";
+
+	    //Condere titulos indicis pensorum in aera
+	    let weekSchedule = 
+	    [
+		new docx.TableRow({
+		    children: [
+			new docx.TableCell({
+			    children: [
+				new docx.Paragraph({
+				    children: [
+					new docx.TextRun({
+					    text: "Day",
+					    font: "Avenir Next LT Pro Light",
+					    size: 36,
+					    bold: true,
+					    color: "FFFFFF"
+					})
+				    ],
+				    alignment: docx.AlignmentType.CENTER,
+				})
+			    ],
+			    shading: {fill: "#A5A5A5"},
+			    borders: borderStyle,
+			}),
+			new docx.TableCell({
+			    children: [
+				new docx.Paragraph({
+				    children: [
+					new docx.TextRun({
+					    text: "Date",
+					    font: "Avenir Next LT Pro Light",
+					    size: 36,
+					    bold: true,
+					    color: "FFFFFF"
+					})
+				    ],
+				    alignment: docx.AlignmentType.CENTER,
+				})
+			    ],
+			    shading: {fill: "#A5A5A5"},
+			    borders: borderStyle, 
+
+			}),
+			new docx.TableCell({
+			    children: [
+				new docx.Paragraph({
+				    children: [
+					new docx.TextRun({
+					    text: "Weekly Assignments and Tasks",
+					    font: "Avenir Next LT Pro Light",
+					    size: 36,
+					    bold: true,
+					    color: "FFFFFF"
+					})
+				    ],
+				    alignment: docx.AlignmentType.CENTER,
+				})
+			    ],
+			    shading: {fill: "#A5A5A5"},
+			    borders: borderStyle,
+			}),
+		    ]
+		})
+	    ];
+	    
+	    //Condere septimanae pensa in aera
+ 		console.log("creatur spatium pensis");
+
+		let rowColor = ["#EDEDED","#FFFFFF"];
+		let rowWidth = [20,20, 60];
+		let lettrSize = 30;
+		let boldFace = false;
+
+	    for (let i = 0; i < 7; i++)
+	    {
+
+		let annusP = hicLunaeDies.getFullYear();
+		let mensisNumP = hicLunaeDies.getMonth();
+		let lunaeDiesP = hicLunaeDies.getDate();
+		let currMonthMaxP = new Date(annusP, mensisNumP, 0).getDate();
+
+		let rowCont = [];
+		//Preparare inscripta cuiusque quadrati
+		for (let j = 0; j < 3; j++)
+		{
+			let textVal = 
+			[
+				new docx.Paragraph(
+				{
+					children: 
+					[
+						new docx.TextRun(
+						{
+							text:  "",
+							font: "Avenir Next LT Pro Light",
+							size: lettrSize,
+							bold: boldFace
+				 		})
+					]
+			 	})
+			]
+			if(j == 0)
+			{
+				textVal = 
+				[
+					new docx.Paragraph(
+					{
+						children: 
+						[
+							new docx.TextRun(
+							{
+								text:  dies[i],
+								font: "Avenir Next LT Pro Light",
+								size: lettrSize,
+								bold: boldFace
+					 		})
+						]
+				 	})
+				]
+			}
+			if(j == 1)
+			{
+				lunaeDiesP += i;
+				if (lunaeDiesP > currMonthMaxP)
+				{
+					mensisNumP += 1;
+					lunaeDiesP -= currMonthMax;
+					currMonthMaxP = new Date(annus, monthNum, 0).getDate();
+				}
+	//PI.B corrige numerum mensis et anni si transit per annos
+				if (mensisNumP > 11)
+				{
+					annusP += 1;
+					mensisNumP = 0;
+				}
+
+				textVal = 
+				[
+					new docx.Paragraph(
+					{
+						children: 
+						[
+							new docx.TextRun(
+							{
+								text: lunaeDiesP +" "+ menses[mensisNumP] +" "+ annusP,
+								font: "Avenir Next LT Pro Light",
+								size: lettrSize,
+								bold: boldFace
+					 		})
+						]
+				 	})
+				];
+			}
+
+			if(j == 2)
+			{
+				textVal = pensorumSingulaWord(dies[i], pensorumSingula)
+			}
+		
+			rowCont.push
+			(
+				new docx.TableCell(
+				{
+					width: 
+					{
+						size: rowWidth[j],
+						type: docx.WidthType.PERCENTAGE
+					},
+					children: textVal,
+					shading: {fill: rowColor[ i%2 ]},
+					borders: borderStyle,
+			 	})             
+		     );
+		}
+		weekSchedule.push(new docx.TableRow({ children: rowCont}));
+	    }
+	    console.log("creatur spatium horarum otiorum")
+
+	    //Condere titulos indicis horarum otiosarum in aera
+	    let compHours = 
+	    [
+		new docx.TableRow({
+		    children: [
+			new docx.TableCell({
+			    children: [
+				new docx.Paragraph({
+				    children: [
+					new docx.TextRun({
+					    text: "Leave Type",
+					    font: "Avenir Next LT Pro Light",
+					    size: 36,
+					    bold: true,
+					    color: "FFFFFF"
+					})
+				    ],
+				    alignment: docx.AlignmentType.CENTER,
+				})
+			    ],
+			    shading: {fill: "#A5A5A5"},
+			    borders: borderStyle,
+			}),
+			new docx.TableCell({
+			    children: [
+				new docx.Paragraph({
+				    children: [
+					new docx.TextRun({
+					    text: "Hours",
+					    font: "Avenir Next LT Pro Light",
+					    size: 36,
+					    bold: true,
+					    color: "FFFFFF"
+					})
+				    ],
+				    alignment: docx.AlignmentType.CENTER,
+				})
+			    ],
+			    shading: {fill: "#A5A5A5"},
+			    borders: borderStyle,
+			}),
+		    ]
+		})
+	    ];
+
+
+	    //Condere horas otiosas in aera
+	    for (let i = 0; i < 6 ; i++)
+	    {
+		//Preparare inscripta cuiusque quadrati
+		let dayVal = ["Vacation", "Sick Leave", "Comp Leave",
+			"Authorized Absence", "Leave without Pay", "Cumulative Comp Leave"];
+		let rowText = [dayVal[i], 0];
+		let rowCont = [];
+		
+		for (let j = 0; j < 2; j++)
+		{
+		     let rowColor = ["#EDEDED","#FFFFFF"];
+		     let rowWidth = [75, 25];
+		     let lettrSize = 30;
+		     let boldFace = false;
+		     if (j == 1)
+		     {
+			 lettrSize = 20;
+			 boldFace = false;
+		     }
+		     rowCont.push
+		     (
+			 new docx.TableCell({
+			     width: {
+				 size: rowWidth[j],
+				 type: docx.WidthType.PERCENTAGE
+			     },
+			     children: [
+				 new docx.Paragraph({
+				     children: [
+					 new docx.TextRun({
+					     text: rowText[j],
+					     font: "Avenir Next LT Pro Light",
+					     size: lettrSize,
+					     bold: boldFace
+					 })
+				     ]
+				 })
+			     ],
+			     shading: {fill: rowColor[ i%2 ]},
+			     borders: borderStyle,
+			 })             
+		     );
+		}
+		compHours.push(new docx.TableRow({ children: rowCont}));
+	    }
+
+	    console.log("Spatium adnotationibus aptum creatur");
+	    const doc = new docx.Document
+	    ({
+		creator: fName +" "+lName,
+		description: "Itinerary generated for " + tnum,
+		title: "Weekly Itinerary for" +lName+fName+" on "+lunaeDiesElm+" "+menses[mensisNum]+" "+annus,
+		sections:
+		[{
+			properties:
+			{
+				page:
+				{
+					margin:
+					{
+						right: 750,
+						bottom: 750,
+						left: 750,
+						header: 750,
+				
+					}
+			    	}
+			   
+			},
+			headers : {
+			    default: new docx.Header({
+					children: [
+			    new docx.Table({
+				rows: [
+				    new docx.TableRow({
+					children: [
+					   new docx.TableCell({
+					       children: [new docx.Paragraph({ children: [ualrlogo]})],
+					       verticalAlign: docx.VerticalAlign.CENTER,
+						borders:
+						{
+						   top: {style: docx.BorderStyle.NIL, size:0},
+						   bottom: {style: docx.BorderStyle.NIL, size: 0},
+						   left: {style: docx.BorderStyle.NIL, size: 0},
+						   right: {style: docx.BorderStyle.NIL, size: 0}
+						},
+					   }),
+					   new docx.TableCell({
+					       children: [
+						   new docx.Paragraph({alignment: docx.AlignmentType.RIGHT, children: [iterHeaderText[0],iterHeaderText[1],iterHeaderText[2]]}),
+						   new docx.Paragraph({alignment:docx.AlignmentType.RIGHT, children: [iterHeaderText[3]]})
+					       ],
+					       verticalAlign: docx.VerticalAlign.CENTER,
+					       borders: {
+						   top: {style: docx.BorderStyle.NIL, size:0},
+						   bottom: {style: docx.BorderStyle.NIL, size: 0},
+						   left: {style: docx.BorderStyle.NIL, size: 0},
+						   right: {style: docx.BorderStyle.NIL, size: 0}},
+					   }),
+				       ],
+				   }),
+				]
+			    }),
+			    ]
+			}),
+			},
+			children:
+			[
+				new docx.Paragraph(
+				{
+					children:
+					[
+						new docx.TextRun({
+						text: "Name: " + fName + " " + lName,
+						font: "Avenir Next LT Pro Light",
+						size: 32,
+						bold: true
+				    		})
+					]
+				}),
+				new docx.Paragraph({children: []}),
+				new docx.Paragraph({children: []}),
+				new docx.Table({rows: weekSchedule}),
+			]
+		}]
+	    });
+	 
+	    doc.addSection({
+		properties: {
+		    type:docx.SectionType.CONTINUOUS,
+		    page:{
+			margin: {
+			    right: 750,
+			    bottom: 750,
+			    left: 750,
+			    header: 750,
+				
+			}
+		    }
+		},
+		children: [
+			    new docx.Table({ rows: [
+				new docx.TableRow({
+				    children: [
+					new docx.TableCell({
+					    width:{
+						size: 1000000,
+						type: docx.WidthType.DXA
+					    },
+					    children: [new docx.Paragraph({
+						 alignment: docx.AlignmentType.LEFT,
+						 children:[
+						     new docx.TextRun({
+							 text: "Notes:",
+							 font: "Avenir Next LT Pro Light",
+							 size: 32,
+							 bold: true
+						     })
+						 ]
+					     })
+					     ],
+					     verticalAlign: docx.VerticalAlign.CENTER,
+					     borders: {
+						 "top": {style: docx.BorderStyle.NIL, size: 0},
+						 "bottom": {style: docx.BorderStyle.NIL, size: 0},
+						 "left": {style: docx.BorderStyle.NIL, size: 0},
+						 "right": {style: docx.BorderStyle.NIL, size: 0}
+					     },
+					}),
+				    ],
+				}),
+				new docx.TableRow({
+				    children: [
+					new docx.TableCell({
+					    width:{
+						size: 100,
+						type: docx.WidthType.PERCENTAGE
+					    },
+					    children: [new docx.Paragraph({
+						 alignment: docx.AlignmentType.LEFT,
+						 children:[
+						     new docx.TextRun({
+							 text: "",
+							 font: "Avenir Next LT Pro Light",
+							 size: 14,
+							 bold: false
+						     })
+						 ]
+					     })
+					     ],
+					     verticalAlign: docx.VerticalAlign.CENTER,
+					     borders: {
+						 top: {style: docx.BorderStyle.NIL, size: 0},
+					     },
+					}),
+				    ],
+				}),
+
+			    ]}),
+			],
+	   });
+		doc.addSection(
+		{
+			properties:
+			{
+				type:docx.SectionType.CONTINUOUS,
+				page:
+				{
+					margin:
+					{
+						right: 750,
+						bottom: 750,
+						left: 750,
+						header: 750,
+					}
+				}
+			},
+			children:
+			[
+				new docx.Paragraph({children: []}),
+				new docx.Table({rows: compHours}),
+			]
+		});
+	
+		docx.Packer.toBuffer(doc).then((buffer) =>
+		{
+
+			let iterprint_file = iterpath(".docx", hicLunaeDies);
+                
+                	if(fluxum && iterprint_file["read"])
+			{
+                    		iterprint_file = iterprint_file["read"];
+                	}
+                	else
+                	{
+				iterprint_file = path.join(__dirname, "..", iterprint_file["write"]);
+			}
+			fs.writeFileSync(iterprint_file, buffer);
+			console.log("saved: " + iterprint_file);
+		});
+
+		let iterjson_file = iterpath(".json", hicLunaeDies);
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(jsoninvenitur)
+		{
+			let itinerarium_json = fs.readFileSync(iterjson_file, "utf8")
+			let itinerarium_septimanae = JSON.parse(itinerarium_json)
+			itinerarium_septimanae.push(pensorumSingula)
+			fs.writeFileSync(iterjson_file, JSON.stringify(itinerarium_septimanae));
+		}
+		else
+		{
+			let itinerarium_matrix = [pensorumSingula]
+				fs.writeFileSync(iterjson_file, JSON.stringify(itinerarium_matrix));
+		}
+		
+	return 0;
+	
+	}
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerariumVacuefacereGradusII
+ * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
+ * Intus: nil
+ * Exitus: nil
+ */
+
+exports.itinerariumVacuefacereGradusII = async (e) =>
+{
+	let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella()
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {itinerariiStatus: 
+		{
+			backlog: false,
+			praesensAbest: false,
+			diesLunae: false,
+			impressa: []
+		}
+	}})
+	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let monitio = ""
+	let monenda_itineraria = await comprobareItinerariaSera()
+	arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.backlog": (monenda_itineraria.length > 0) }})
+	
+	for (let i = 0; i < monenda_itineraria.length; i++)
+	{
+		monitio += monenda_itineraria[i].getDate() + " " + menses[monenda_itineraria[i].getMonth()]+ " " + monenda_itineraria[i].getFullYear() + "\n";
+	}
+	if (monenda_itineraria.length)
+	{
+		fenPQSME.webContents.send("seratibitinera",{monitio:monitio, itinerariiStatus: usuariusMongo.itinerariiStatus})
+	}
+	const temporisSignum = setInterval(comprobareHoram, 5000)
+	console.log("Novus ambitus")
+	//arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {temporisSignum: temporisSignum}})
+	//console.log(pensorumSingula)
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerariumVacuefacereGradusI
+ * Descriptio: Fenestellam prīmam claudit qua ûsuârius itinerârium vacuefacere confirmat ut ūsuārius vērē confirmat sē velle itinerarārium vacuefacere
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+exports.itinerariumVacuefacereGradusI = async () =>
+{
+	await fenestellae.fenestellaItinerariumVacuefaciendiGI.relinquereFenestellam()
+	await fenestellae.fenestellaItinerariumVacuefaciendiGII.utiFenestella()
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerariumNovumVolo
+ * Descriptio: Fenestellam claudit qua ûsuârius itinerârium vacuefacere confirmat
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+exports.noliItinerariumVacuefacere = async (e, gradus) =>
+{
+	if (gradus == 1)
+	{
+		await fenestellae.fenestellaItinerariumVacuefaciendiGI.relinquereFenestellam()
+	}
+	else if (gradus == 2)
+	{
+		await fenestellae.fenestellaItinerariumVacuefaciendiGII.relinquereFenestellam()
+	}
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerariumNovumVolo
+ * Descriptio: Fenestellam legat qua ûsuârius itinerâria exprimenda êligit diêbus scribendô
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+exports.itinerariumNovumVolo = async () =>
+{
+	await fenestellae.fenestellaItinerariumVacuefaciendiGI.utiFenestella();
+}
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerariaTypisExprimere
+ * Descriptio: Fenestellam legat qua ûsuârius itinerâria exprimenda êligit diêbus scribendô
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+exports.itinerariaTypisExprimere = async () =>
+{
+	await fenestellae.fenestellaTypisExprimendi.utiFenestella();
+}
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: singularia-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+exports.singulariaTypisExprimere = async (e, formula) =>
+{
+
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+exports.intervallaTypisExprimere = async (e, dierumIntervallum) =>
+{
+	let diesPrimus = diesLunae(dierumIntervallum["diesPrimus"], 0)
+	let diesUltimus = diesLunae(dierumIntervallum["diesUltimus"], 0)
+
+	if (diesUltimus < diesPrimus)
+	{
+		console.log("Error")
+		//error
+	}
+	else
+	{
+
+		let expressionisLocus = locusTypisExpressionis();
+		while (diesPrimus <= diesUltimus)
+		{
+			let itinerisScapus = iterpath(".docx", diesPrimus)
+			if (itinerisScapus["read"])
+			{
+				const aditusDirectus = createDesktopShortcuts(
+				{
+					windows:
+					{
+						filePath: path.join(__dirname, "..", itinerisScapus["read"]),
+						outputPath: path.join(__dirname, "..", expressionisLocus),
+					},
+					linux:
+					{
+						filePath: itinerisScapus["read"],
+						outputPath: expressionisLocus
+					},
+					osx:
+					{
+						filePath: itinerisScapus["read"],
+						outputPath: expressionisLocus
+					}
+				})
+
+				if (aditusDirectus)
+				{
+					console.log("macte")
+				}
+				else
+				{
+					console.log("error")
+				}
+			}
+			else
+			{
+				console.log("Itinerarium non est: " + itinerisScapus["write"])
+			}
+
+
+			diesPrimus = diesLunae(diesPrimus, 1)
+	
+		}
+	}
+	
+	await fenestellae.fenestellaTypisExprimendi.relinquereFenestellam();
+}
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: noli-indicem-creare
+ * Descriptio: Fenestellam quâ indicem itinerâriôrum creâtur tollit                                                  * Intus: nil
+ * Exitus: nil
+ */
+
+exports.noliIndicemCreare = async () =>
+{
+	await fenestellae.fenestellaTypisExprimendi.relinquereFenestellam();
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: comprobareHoram
+ * Descriptio: Comprobat an itinerâria praeterita nîmis vetera sint. Sî sunt, indicem itinerâriôrum faciendôrum reddit
+ * Exitus: index itinerâriôrum faciendôrum
+ */
+async function comprobareItinerariaSera()
+{
+	let nunc = new Date();
+	let annoAddendum = (nunc.getMonth() < 8)
+	let initiumAnni = new Date(nunc.getFullYear()-annoAddendum, 8)
+	let initiumLunae = diesLunae(initiumAnni, 0)
+	let diesLunaeNunc = diesLunae(nunc, -1)
+
+	let monendum = []
+	while (initiumLunae <= diesLunaeNunc)
+	{
+		let iterjson_file = iterpath(".json", initiumLunae);
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(!jsoninvenitur)
+		{
+			monendum.push(initiumLunae)
+		}
+
+		initiumLunae = diesLunae(initiumLunae, 1)
+	}
+	return monendum;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: comprobareHoram
+ * Descriptio: Comprobat an itinerârium praesens nîmis vetus sit. Sî est, vacuefacit itinerârium
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+async function comprobareHoram()
+{
+	let fenPQSME = await fenestellae.fenestellaPQSME.utiFenestella()
+	let nunc = new Date();
+
+	let diesLunaeNunc = diesLunae(nunc, 0)
+
+	const repoDatorum = await repositorium.utiRepositorio()
+	const arces = await repoDatorum.consequiCongeriem('arx')
+	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let iterjson_file = iterpath(".json", new Date(usuariusMongo['itinerariumPraesens']));
+	let dies_praeteriti = (nunc - usuariusMongo['itinerariumPraesens'])/(1000*60*60*24)
+	if(dies_praeteriti > 7)
+	{
+/*
+		let itinerariorumserorum_locus = iterpath("", new Date(usuariusMongo['itinerariumPraesens']))+"_praeterita_itineraria.json";
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(!jsoninvenitur)
+		{
+			let itineraserainveniuntur = fs.existsSync(itinerariorumserorum_locus);
+
+			if(!itineraserainveniuntur)
+			{
+				let itinerariorumserorum_index = [usuariusMongo['itinerariumPraesens']]
+				fs.writeFileSync(itinerariorumserorum_locus , JSON.stringify(itinerariorumserorum_index));
+				return;
+			}
+			
+		}
+
+		let itinerariasera_json = fs.readFileSync(itinerariorumserorum_locus, "utf8")
+		let itinerariasera_index = JSON.parse(itinerariasera_json)
+		let priusiter = JSON.parse(JSON.stringify(new Date (usuariusMongo['itinerariumPraesens'])));
+
+		if(!itinerariasera_index.includes(priusiter))
+		{
+			itinerariasera_index.push(usuariusMongo['itinerariumPraesens'])	
+			fs.writeFileSync(itinerariorumserorum_locus, JSON.stringify(itinerariasera_index));
+		}
+*/
+
+		//initium diêî novâ
+
+		console.log("Multo tempore non utilitate usus es")
+		console.log("Hercle, hac utitur post " + Math.floor(dies_praeteriti) + " dies!")
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {itinerariumPraesens: diesLunae(nunc,0)}})
+
+		//itinerârium vacuefac
+		let sectiones = await asanaeSectiones();
+		let pensa = await asanaePensaSeptimanae(sectiones);
+		let pensorumSingula = await asanaePensorumSingula(pensa);
+		let tasksApiInstance = new Asana.TasksApi();
+		let finis = await asanaeSectionesUltimae()
+
+		/*
+		console.log("Movens ad novam septimanam")
+		for (let dies in pensorumSingula)
+		{
+			for (let pensum of pensorumSingula[dies])
+			{
+				let locus = 0;
+				if(!pensum.completed)
+				{
+					locus = 1;
+				}
+				let materia =
+				{
+					"data":
+					{	
+						"project": "1207982562429472",
+						"section": finis[locus]
+					}
+				}
+				tasksApiInstance.addProjectForTask(materia, pensum.gid).then((exitus) =>
+				{
+				}, (error) => 
+				{
+					console.error(error.response.body);
+				});
+			}
+		}
+		console.log("Pensa vacuefacta")
+		*/
+	}
+
+	if((nunc - usuariusMongo['itinerariumPraesens'])/(1000*60*60*24) == 0)
+	{
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.diesLunae": true }})
+		fenPQSME.webContents.send("expectaturiter", usuariusMongo.itinerariiStatus)
+		return;
+	}
+	else
+	{
+
+		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.diesLunae": false }})
+		let jsoninvenitur = fs.existsSync(iterjson_file);
+		if(jsoninvenitur)
+		{
+		
+			arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.praesensAbest": false }})
+			fenPQSME.webContents.send("tibistnunciter", usuariusMongo.itinerariiStatus)
+			return;
+		}
+		else
+		{
+
+			arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {"itinerariiStatus.praesensAbest": true }})
+			fenPQSME.webContents.send("tibiternondum",  usuariusMongo.itinerariiStatus)
+			return;
+		}
+	}
+}
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: PensorumSingulaWord
+ * Descriptio: Consequî pensa ex quibus quoddam penum constitutur
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+
+function pensorumSingulaWord(diesVal, pensorumIndex)
+{
+	let index = [];
+	for (let i = 0; i < pensorumIndex[diesVal].length; i++)
+	{
+
+		//console.log("NOMINIS PROBATIO")
+		//console.log(pensorumIndex[diesVal][i]['name'],
+		let titulum = new docx.Paragraph(
+		{
+			children:
+			[
+				new docx.TextRun(
+				{
+					font: "Avenir Next LT Pro Light",
+					size: 12,
+					text: pensorumIndex[diesVal][i]['name'],
+					bold: true,
+					strike: pensorumIndex[diesVal][i]['completed']
+				})
+			],
+			bullet:
+			{
+				level: 0
+			}
+		})
+		let descriptio = new docx.Paragraph(
+		{
+			children:
+			[
+				new docx.TextRun(
+				{
+					font: "Avenir Next LT Pro Light",
+					size: 12,
+					text: "Description: " + pensorumIndex[diesVal][i]['description']
+				})
+			]
+		})
+		let adnotatio = new docx.Paragraph(
+		{
+			children:
+			[
+				new docx.TextRun(
+				{
+					font: "Avenir Next LT Pro Light",
+					size: 12,
+					text: "Last Comment: " + pensorumIndex[diesVal][i]['last_comment']
+				})
+			]
+		})
+
+		let praesensGradus = []
+		for (let k = 0; k < pensorumIndex[diesVal][i]['graduus'].length; k++)
+		{
+			let gradusNomen = pensorumIndex[diesVal][i]['graduus'][k]["name"]
+
+			if (!k)
+			{
+
+				praesensGradus.push(new docx.Paragraph(
+				{
+					children:
+					[
+						new docx.TextRun(
+						{
+							font: "Avenir Next LT Pro Light",
+							size: 12,
+							text: "Subtasks"
+						})
+					]
+				}));
+				praesensGradus.push(new docx.Paragraph({children:[]}))
+			}
+
+
+			praesensGradus.push(new docx.Paragraph(
+			{
+				children:
+				[
+					new docx.TextRun(
+					{
+						font: "Avenir Next LT Pro Light",
+						size: 12,
+						text: gradusNomen
+					})
+				]
+			}));
+		}
+
+		index.push(titulum)
+		index.push(descriptio)
+		index.push(new docx.Paragraph({children: [new docx.TextRun("***")]}))
+
+		for (let k = 0; k < praesensGradus.length; k++)
+		{
+			index.push(praesensGradus[k])
+		}
+
+		index.push(adnotatio)
+
+
+		index.push(new docx.Paragraph({children: []}))
+	}
+	return index;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaePensorumGraduus
+ * Descriptio: Pensa quae sunt gradūs pensī consequī
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+
+async function asanaePensorumGraduus(pensorumIndex)
+{
+	console.log("G4/5 - PENSORUM GRADUS ENUMERANTUR")
+	let taskApiInstance = new Asana.TasksApi();
+	let storiesApiInstance = new Asana.StoriesApi();
+	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "To Do", "Routine"];
+	for(let i=0; i < 9; i++)
+	{
+		
+		for(let k = 0; k < pensorumIndex[locus[i]].length; k++)
+		{
+			let tasksApiInstance = new Asana.TasksApi();
+			await tasksApiInstance.getSubtasksForTask(pensorumIndex[locus[i]][k].gid).then((pensiGraduus) =>
+			{
+				pensorumIndex[locus[i]][k]['graduus'] = pensiGraduus.data;
+			}, (error) =>
+			{
+				console.log(error.response.body);
+			});
+
+			let opts =
+			{
+				"opt_fields": "created_at,resource_subtype,text"
+			}
+		}
+	}
+	console.log("G4/5 - PENSORUM GRADUS IAM ENUMERATI")
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaePensorumSingula
+ * Descriptio: Consequî pensa ex quibus quoddam penum constitutur
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+
+async function asanaePensorumSingula(pensorumIndex)
+{
+
+	console.log("G3/5 - PENSORUM SINGULA ENUMERANTUR")
+	let taskApiInstance = new Asana.TasksApi();
+	let storiesApiInstance = new Asana.StoriesApi();
+	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "To Do", "Routine"];
+	for(let i=0; i < 9; i++)
+	{
+		
+		for(let k = 0; k < pensorumIndex[locus[i]].length; k++)
+		{
+			let tasksApiInstance = new Asana.TasksApi();
+			await tasksApiInstance.getTask(pensorumIndex[locus[i]][k].gid).then((pensiSingula) =>
+			{
+				pensorumIndex[locus[i]][k]['completed'] = pensiSingula.data.completed;
+				pensorumIndex[locus[i]][k]['description'] = pensiSingula.data.notes;	
+			}, (error) =>
+			{
+				console.log(error.response.body);
+			});
+
+			let opts =
+			{
+				"opt_fields": "created_at,resource_subtype,text"
+			}
+
+			await storiesApiInstance.getStoriesForTask(pensorumIndex[locus[i]][k].gid,opts).then((gesta) =>
+			{
+
+				let adnotationes = []
+				for(let l = 0; l < gesta.data.length; l++)
+				{
+					if(gesta.data[l]["resource_subtype"] = "comment_added")
+					{
+						adnotationes.push(gesta.data[l])
+					}
+				}
+				return adnotationes;
+
+			}).then((adnotationumIndex) =>
+			{
+				adnotationumIndex.sort(((a,b) => a["created_at"] - b["created_at"]))
+				let detrahandum = 1
+				while(adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("description"))
+				{
+					detrahandum ++;
+				}
+
+				pensorumIndex[locus[i]][k]['last_comment'] = adnotationumIndex[adnotationumIndex.length-detrahandum].text
+			}).catch((error)=>
+			{
+				console.log(error);
+			});
+
+		}
+	}
+
+	console.log("G3/5 - PENSORUM SINGULA IAM ENUMERANTA")
+	return pensorumIndex;
+
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaePensum
+ * Descriptio: Consequî pensum significatur quoddam signô numeriô
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+
+
+async function asanaePensaSeptimanae(sectionumGID)
+{
+	console.log("G2/5 - PENSA SEPTIMANAE ENUMERANTUR")
+	let tasksApiInstance = new Asana.TasksApi();
+	let pensorumSingula =
+		{
+			"Monday":[],
+			"Tuesday":[],
+			"Wednesday":[],
+			"Thursday":[],
+			"Friday":[],
+			"Saturday":[],
+			"Sunday":[],
+			"To Do":[],
+			"Routine": []
+		}
+	let locus = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "To Do", "Routines"];
+	for(let i=0;i < 8; i++)
+	{
+		let tasksApiInstance = new Asana.TasksApi();
+		await tasksApiInstance.getTasksForSection(sectionumGID[i]).then((pensaSect) =>
+		{
+			for (let k=0; k < pensaSect.data.length; k++)
+			{
+				pensorumSingula[locus[i]].push(
+				{
+					"gid": pensaSect.data[k].gid,
+					"name": pensaSect.data[k].name,
+					"description": "",
+					"last_comment": "",
+					"completed": false
+				}
+				)
+			}
+		}, (error) =>
+		{
+			console.error(error.response.body)
+		});
+	}
+	console.log("G2/5 - PENSA SEPTIMANAE IAM ENUMERATA")
+	return pensorumSingula
+}
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaeDiem
+ * Descriptio: Consequî pensa cuiusdam diei quî significatur quoddam signô numeriô
+ * Intus:
+ *      (o) eventus
+ *      (o) signum numerium ûnicum pensî
+ * Exitus: nil
+ */
+exports.asanaeDiem = (e, diesGid, diesNomen) => {
+
+	let tasksApiInstance = new Asana.TasksApi();
+	let opts = {
+		'opt_fields': "memberships.section.name"
+	};
+	tasksApiInstance.getTasksForSection(diesGid, opts).then((dataPensaDiei) => {
+		win.webContents.send("datus-asanae-dies", dataPensaDiei.data)
+	});
+/*
+	let huiusDieiPensaGid = [];
+	dataPensa.data.forEach((pensum) =>
+				{
+					huiusDieiPensaGid.push(pensum.gid);
+				});
+				return huiusDieiPensaGid;
+			}, (error) => {
+				console.error(error.response.body);
+			}).then((pensaDiei) => {
+				pensaCollectaSept.push(pensaDiei);
+				if (pensaCollectaSept.length == 5) {return pensaCollectaSept}	
+			}, (error) => {
+				console.error(error.response.body)
+			}).then ((pensaCollecta) => {
+				console.log(pensaCollecta.length);
+			}, (error) => {
+				console.error(error.response.body);
+			});*/
+
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaeSectionesUltimae
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) eventus
+ *      (o) conditiones
+ * Exitus: nil
+ */
+async function asanaeSectionesUltimae()
+{
+	let sectionsApiInstance = new Asana.SectionsApi();
+	console.log("sectiones")
+	//testing
+
+	let project_gid = 1201915750197023;
+	if (SANDBOXMODE)
+	{
+		project_gid=1207982562429472;
+	}
+
+	let opts = {
+		'limit': 10,
+	};
+
+	let indexDierumGID = new Array(1);
+
+	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
+	.then((datae_sectiones) =>
+	{
+		console.log("QUAE SECTIONES:" + datae_sectiones)
+		return datae_sectiones.data;
+	}).then((dierumSectiones) =>
+	{
+		for (i = 0; i < dierumSectiones.length; i++)
+		{
+			let locus = 0;
+			if (dierumSectiones[i].name == "Completed" || dierumSectiones[i].name == "Terminado" || dierumSectiones[i].name == "Perfecta")
+			{
+				locus = 0;
+			}
+			if (dierumSectiones[i].name == "To Do" || dierumSectiones[i].name == "Tareas" || dierumSectiones[i].name == "Tarefas" || dierumSectiones[i].name == "Pensa Agenda")
+			{
+				locus = 1;
+			}
+			indexDierumGID[locus] = dierumSectiones[i].gid;
+		}
+	}).catch((error) =>
+	{
+		console.error(error)
+	});
+
+	return indexDierumGID;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: asanaeSectiones
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) eventus
+ *      (o) conditiones
+ * Exitus: nil
+ */
+async function asanaeSectiones()
+{
+
+	let sectionsApiInstance = new Asana.SectionsApi();
+	let project_gid = 1201915750197023
+	console.log("G1/5 - SECTIONES ENUMERANTUR")
+
+	if (SANDBOXMODE)
+	{
+			project_gid = 1207982562429472;
+	}
+
+	let opts = {
+		'limit': 10,
+	};
+
+	let indexDierumGID = new Array(7);
+
+	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
+	.then((datae_sectiones) =>
+	{
+		
+		let sectDierum = datae_sectiones.data.slice(0,9);
+		return sectDierum;
+	}).then((dierumSectiones) =>
+	{
+		for (i = 0; i < dierumSectiones.length; i++)
+		{
+			let locus = 0;
+			if (dierumSectiones[i].name == "Monday" || dierumSectiones[i].name == "Lunes" || dierumSectiones[i].name == "Dies Lunae" || dierumSectiones[i].name == "Segunda")
+			{
+				locus = 0;
+			}
+			if (dierumSectiones[i].name == "Tuesday" || dierumSectiones[i].name == "Martis" || dierumSectiones[i].name == "Dies Martis" || dierumSectiones[i].name == "Terça")
+			{
+				locus = 1;
+			}
+			if (dierumSectiones[i].name == "Wednesday" || dierumSectiones[i].name == "Miércoles" || dierumSectiones[i].name == "Dies Mercurii" || dierumSectiones[i].name == "Quarta")
+			{
+				locus = 2;
+			}
+			if (dierumSectiones[i].name == "Thursday" || dierumSectiones[i].name == "Jueves" || dierumSectiones[i].name == "Dies Iovis" || dierumSectiones[i].name == "Quinta")
+			{
+				locus = 3;
+			}
+			if (dierumSectiones[i].name == "Friday" || dierumSectiones[i].name == "Viernes" || dierumSectiones[i].name == "Dies Veneris" || dierumSectiones[i].name == "Sexta")
+			{
+				locus = 4;
+			}
+			if (dierumSectiones[i].name == "Saturday" || dierumSectiones[i].name == "Sábado" || dierumSectiones[i].name == "Dies Saturni")
+			{
+				locus = 5;
+			}
+			if (dierumSectiones[i].name == "Sunday" || dierumSectiones[i].name == "Domingo" || dierumSectiones[i].name == "Dies Solis")
+			{
+				locus = 6;
+			}
+			if (dierumSectiones[i].name == "Alvos" || dierumSectiones[i].name == "To Do" || dierumSectiones[i].name == "Tareas" || dierumSectiones[i].name == "Tarefas" || dierumSectiones[i].name == "Pensa Agenda") 
+			{
+				locus = 7;
+			}
+
+			if (dierumSectiones[i].name == "Rutinas" || dierumSectiones[i].name == "Routines" || dierumSectiones[i].name == "Pensa Translaticia")
+			{
+				locus = 8;
+			}
+			indexDierumGID[locus] = dierumSectiones[i].gid;
+		}
+	}).catch((error) =>
+	{
+		console.error(error)
+	});
+	console.log("G1/5 - SECTIONES IAM ENUMERATAE")
+	return indexDierumGID;
+}
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: iterpath
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) filetype - genus scapî ad quod itinerârium servandum
+ *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
+ * Exitus:
+ * 	(o) genere scapî solûtô, locus ubi itinerâria servanda
+ * 	(o) genus json datô, locus itinerâriî json
+ * 	(o) genus docx datô,
+ * 	    (o) locus novissimus - locus itinerâriî generis docx servandî
+ * 	    (o) locus praesens - locus itinerâriî iam novê servantî (et legendî)
+ */
+
+
+function iterpath(filetype, refdies)
+{
+
+	let monDate = diesLunae(refdies, 0)
+	let annus = monDate.getFullYear();
+	const monthNum = monDate.getMonth();
+	const mondayDate = monDate.getDate();
+
+	const fName = "Christopher";
+	const lName = "Davis";
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	    //computa annum fiscalem
+	let anniFiscalisInitium = annus;
+	if (monthNum < 7)
+	{
+		anniFiscalisInitium -= 1;
+	}
+
+	const fiscalyear = anniFiscalisInitium +"_"+(anniFiscalisInitium+1);
+
+	//compone locum loculamenti
+
+	const monthMarked = monDate.getFullYear()+"_"+(monthNum + 1)+"_"+menses[monthNum];
+
+	const iter_dir = [
+	".itineraries",
+	fiscalyear,
+	monthMarked,
+	""];
+	//compone locum itinerarii
+	let iter_name = [lName+fName,
+	"Wk_Iter",
+	mondayDate+menses[monthNum]+annus];
+
+	//creare locum modo recursante (sî locus iam est, nôn est error)
+	fs.mkdirSync(iter_dir.join("/"), {recursive: true});
+
+	const iterfile = iter_dir.join("/") + iter_name.join("_");
+	if(filetype=="")
+	{
+		return iter_dir.join("/");
+	}
+	else if (filetype == ".json")
+	{
+		return iterfile+filetype;
+	}
+	else
+	{
+
+		let legendiEditio = "_v" + refDies.getDay();
+
+
+		if (!fs.existsSync(iterfile+".json"))
+		{
+			return  {"write": iterfile + legendiEditio + filetype, "read": false};
+		}
+		else
+		{
+			return {"write":iterfile + legendiEditio + filetype, "read": iterfile+ legendiEditio + filetype};
+		}
+	}
+}
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: iterpath
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) filetype - genus scapî ad quod itinerârium servandum
+ *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
+ * Exitus:
+ * 	(o) genere scapî solûtô, locus ubi itinerâria servanda
+ * 	(o) genus json datô, locus itinerâriî json
+ * 	(o) genus docx datô,
+ * 	    (o) locus novissimus - locus itinerâriî generis docx servandî
+ * 	    (o) locus praesens - locus itinerâriî iam novê servantî (et legendî)
+ */
+function iterpathOBSLETA(filetype, refdies)
+{
+
+	let monDate = diesLunae(refdies, 0)
+	let annus = monDate.getFullYear();
+	const monthNum = monDate.getMonth();
+	const mondayDate = monDate.getDate();
+
+	const fName = "Christopher";
+	const lName = "Davis";
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	    //computa annum fiscalem
+	let anniFiscalisInitium = annus;
+	if (monthNum < 7)
+	{
+		anniFiscalisInitium -= 1;
+	}
+
+	const fiscalyear = anniFiscalisInitium +"_"+(anniFiscalisInitium+1);
+
+	//compone locum loculamenti
+
+	const monthMarked = monDate.getFullYear()+"_"+(monthNum + 1)+"_"+menses[monthNum];
+
+	const iter_dir = [
+	".itineraries",
+	fiscalyear,
+	monthMarked,
+	""];
+	//compone locum itinerarii
+	let iter_name = [lName+fName,
+	"Wk_Iter",
+	mondayDate+menses[monthNum]+annus];
+
+	//creare locum modo recursante (sî locus iam est, nôn est error)
+	fs.mkdirSync(iter_dir.join("/"), {recursive: true});
+
+	const iterfile = iter_dir.join("/") + iter_name.join("_");
+	if(filetype=="")
+	{
+		return iter_dir.join("/");
+	}
+	else if (filetype == ".json")
+	{
+		return iterfile+filetype;
+	}
+	else
+	{
+		let version = 0;
+		let versionSuffix = "";
+		let latestFound = false;
+		while(!latestFound)
+		{
+			version++;
+			versionSuffix = "_va" + version + filetype;
+			latestFound = !(fs.existsSync(iterfile+versionSuffix));
+		}
+		if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}
+		return {"write":iterfile + versionSuffix, "read": iterfile+"_va" + (version -1) + filetype};
+	}
+}
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: locusTypisExpressionis
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) filetype - genus scapî ad quod itinerârium servandum
+ *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
+ * Exitus: nil
+ */
+function locusTypisExpressionis(nomenExpr)
+{
+
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	let nunc = new Date()
+	let annus = nunc.getFullYear();
+	let monthNum = nunc.getMonth();
+	let diesNum = nunc.getDay();
+
+	let nomen = annus+"_"+(monthNum+1)+menses[monthNum]+"_"+diesNum;
+	//computa annum fiscalem
+	if (nomenExpr)
+	{
+		nomen = nomenExpr
+	}
+
+	const exprTypis_dir = [
+	".print_jobs",
+	nomen];
+
+
+	const exprTypis_scapus = exprTypis_dir.join("/");
+
+
+	console.log("ExpressionisNomen:" + nomen)
+	let latestFound = false;
+	let version = 1;
+	versionSuffix = "_va" + version + "/";
+
+	while(!latestFound)
+	{
+		versionSuffix = "_va" + version + "/";
+		latestFound = !(fs.existsSync(exprTypis_scapus+versionSuffix));
+		version++;
+	}
+
+	fs.mkdirSync(exprTypis_scapus+versionSuffix, {recursive: true});
+
+		return exprTypis_scapus+versionSuffix;
+}
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: iterpath
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus:
+ *      (o) filetype - genus scapî ad quod itinerârium servandum
+ *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
+ * Exitus:
+ * 	(o) genere scapî solûtô, locus ubi itinerâria servanda
+ * 	(o) genus json datô, locus itinerâriî json
+ * 	(o) genus docx datô,
+ * 	    (o) locus novissimus - locus itinerâriî generis docx servandî
+ * 	    (o) locus praesens - locus itinerâriî iam novê servantî (et legendî)
+ */
+function iterpath(filetype, refdies)
+{
+
+	let monDate = diesLunae(refdies, 0)
+	let annus = monDate.getFullYear();
+	const monthNum = monDate.getMonth();
+	const mondayDate = monDate.getDate();
+
+	const fName = "Christopher";
+	const lName = "Davis";
+
+	const menses = ["January", "February", "March",
+		        "April", "May", "June", "July", "August",
+		        "September", "October", "November", "December"];
+
+	    //computa annum fiscalem
+	let anniFiscalisInitium = annus;
+	if (monthNum < 7)
+	{
+		anniFiscalisInitium -= 1;
+	}
+
+	const fiscalyear = anniFiscalisInitium +"_"+(anniFiscalisInitium+1);
+
+	//compone locum loculamenti
+
+	const monthMarked = monDate.getFullYear()+"_"+(monthNum + 1)+"_"+menses[monthNum];
+
+	const iter_dir = [
+	".itineraries",
+	fiscalyear,
+	monthMarked,
+	""];
+	//compone locum itinerarii
+	let iter_name = [lName+fName,
+	"Wk_Iter",
+	mondayDate+menses[monthNum]+annus];
+
+	//creare locum modo recursante (sî locus iam est, nôn est error)
+	fs.mkdirSync(iter_dir.join("/"), {recursive: true});
+
+	const iterfile = iter_dir.join("/") + iter_name.join("_");
+	if(filetype=="")
+	{
+		return iter_dir.join("/");
+	}
+	else if (filetype == ".json")
+	{
+		return iterfile+filetype;
+	}
+	else
+	{
+		let version = 0;
+		let versionSuffix = "";
+		let latestFound = false;
+		while(!latestFound)
+		{
+			version++;
+			versionSuffix = "_va" + version + filetype;
+			latestFound = !(fs.existsSync(iterfile+versionSuffix));
+		}
+		if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}
+		return {"write":iterfile + versionSuffix, "read": iterfile+"_va" + (version -1) + filetype};
+	}
+}
+
+function diesLunae(refDay, weekInterval)
+{
+
+	 let annus      = refDay.getFullYear();
+	 let monthNum   = refDay.getMonth();
+	 let mondayDist = refDay.getDay()-1;
+	 let mondayDate = refDay.getDate() - mondayDist;
+
+	//PARS I: computa diem itinerarii
+	//
+	mondayDate += weekInterval*7;
+	//PI.A si diei num excedat max. diem aut succedit min. die
+	let currMonthMax = new Date(annus, monthNum+1, 0).getDate();
+
+	let prevMonthMax = new Date(annus, monthNum, 0).getDate();
+	if (mondayDate < 1)
+	{
+		monthNum -= 1;
+		mondayDate += prevMonthMax;
+		currMonthMax = prevMonthMax;
+		prevMonthMax = new Date(annus, monthNum - 1, 0).getDate();
+	}
+
+	if (mondayDate > currMonthMax)
+	{
+		monthNum += 1;
+		mondayDate -= currMonthMax;
+		prevMonthMax = currMonthMax;
+		currMonthMax = new Date(annus, monthNum, 0).getDate();
+	}
+	//PI.B corrige numerum mensis et anni si transit per annos
+	if (monthNum < 0)
+	{
+		annus -= 1;
+		monthNum = 11;
+	}
+	if (monthNum > 11)
+	{
+		annus += 1;
+		monthNum = 0;
+	}
+	return new Date(annus, monthNum, mondayDate);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

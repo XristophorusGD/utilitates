@@ -4,11 +4,35 @@
   "description": "Extensio utilitatis Asanae qua possum creare itineraria",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "nodeMon": "nodemon -e * --exec npm start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compileSass": "sass --watch scss:css"
   },
   "author": "Christopher H Davis",
   "license": "MIT",
   "devDependencies": {
     "electron": "^27.0.2"
+  },
+  "dependencies": {
+    "@ngrok/ngrok": "^1.4.1",
+    "asana": "^3.0.0",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "bootstrap": "^5.3.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "create-desktop-shortcuts": "^1.11.0",
+    "docx": "^8.2.4",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "formidable": "^3.5.1",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.6.0",
+    "nodemon": "^3.1.9",
+    "sass": "^1.86.0",
+    "superagent": "^8.1.2",
+    "uuid": "^10.0.0"
   }
 }

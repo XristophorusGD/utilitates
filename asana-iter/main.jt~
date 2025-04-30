@@ -1,0 +1,386 @@
+/* Architectus adnotationes
+ *
+ * Necessse est mihi servare, temporaliter, locus ngrok in MongoDB repositôriô
+ * 
+ **immutabilia instrumenta ====================================================================================
+ *      _    _____ ____      _    _____   ___ __  __ __  ____     _______  _    ____ ___ _     _____ ____  
+ *     / \  | ____|  _ \    / \  | ____| |_ _|  \/  |  \/  \ \   / /_   _|/ \  | __ )_ _| |   | ____/ ___| 
+ *    / _ \ |  _| | |_) |  / _ \ |  _|    | || |\/| | |\/| |\ \ / /  | | / _ \ |  _ \| || |   |  _| \___ \ 
+ *   / ___ \| |___|  _ <  / ___ \| |___   | || |  | | |  | | \ V /   | |/ ___ \| |_) | || |___| |___ ___) |
+ *  /_/   \_\_____|_| \_\/_/   \_\_____| |___|_|  |_|_|  |_|  \_/    |_/_/   \_\____/___|_____|_____|____/ 
+ *                                                         
+ */
+
+// Instrumentorum indices
+const { app, ipcMain } = require('electron');
+const ngrok = require("@ngrok/ngrok");
+const path = require('path');
+const ipcFunctiones = require('./ipc/ipcFunctionesII');
+const express = require('express');
+const Asana = require('asana');
+const dirWebhk = require('./elaboratorium/directoria/webhookDirectorium');
+const dirOauth = require('./elaboratorium/directoria/oauthDirectorium');
+const dirOperari = require('./elaboratorium/directoria/operariDirectorium');
+
+const repositorium = require('./repositorium_datorum/repositorium');
+const fenestellae = require('./js/fenestellae');
+
+//elaboratorium
+const elaboratorium = express();
+elaboratorium.use('/static', express.static("static"))
+elaboratorium.use('/bootstrap', express.static('node_modules/bootstrap'))
+elaboratorium.use('/css', express.static("css"))
+elaboratorium.use(dirWebhk);
+elaboratorium.use(dirOauth);
+elaboratorium.use(dirOperari);
+
+// Data
+const VERVM = true;
+const FALVSM = false;
+const ostiolum = 4000;
+
+/**incertae =============================================================================================           
+ *      _    _____ ____      _    _____   ___ _   _  ____ _____ ____ _____  _    _____ 
+ *     / \  | ____|  _ \    / \  | ____| |_ _| \ | |/ ___| ____|  _ \_   _|/ \  | ____|
+ *    / _ \ |  _| | |_) |  / _ \ |  _|    | ||  \| | |   |  _| | |_) || | / _ \ |  _|  
+ *   / ___ \| |___|  _ <  / ___ \| |___   | || |\  | |___| |___|  _ < | |/ ___ \| |___ 
+ *  /_/   \_\_____|_| \_\/_/   \_\_____| |___|_| \_|\____|_____|_| \_\|_/_/   \_\_____|
+ *                                                                                                                
+ */
+
+let aditusadrete; //forte periculosum-
+
+app.whenReady().then(async () =>
+{
+	elaboratorium.listen(ostiolum, () => {
+		console.log (`elaboratorium exspectat ostiolo: http://localhost:${ostiolum}`)
+	})
+
+	elaboratorium.use(express.json());
+
+	aditusadrete = await ngrok.forward(
+	{
+		addr: ostiolum,
+		authtoken: "2kOMN9Rlf4ak6eO4phexfkLykTs_832Tme7AGJ6WcPJAAwi2S",
+		oauth_provider: "google",
+		oauth_allow_emails: "chdavis1@ualr.edu",
+		oauth_allow_domains: "ualr.edu"
+	});
+
+	console.log (`elaboratorium exspectat loco:    ${aditusadrete.url()}`)
+	console.log("Emissio ab elaboratorio Asanae constituitur")
+
+	//TEMPORALIA: melius habêre locum rêtiâlem constantem ut aliî ûsuâriî aditum habeant ad
+	//Oauth Asanae
+	//process.env.REDIRECT_URI = `adistusadrete.url()/oauth-callback`;
+	
+	await fenestellae.fenestellaPQSME.utiFenestella()
+	app.on('activate', async () =>
+	{
+		if (BrowswerWindow.getAllWindows().length === 0)
+		{
+			await fenestellae.fenestellaPQSME.utiFenestella()
+		}
+	})
+
+})
+
+app.on('window-all-closed', async (e)=>
+{
+	e.preventDefault();
+	let webhooksApiInstance = new Asana.WebhooksApi();
+	const repoDatorum = await repositorium.utiRepositorio()
+	if(repoDatorum !== undefined)
+	{
+		const arces = await repoDatorum.consequiCongeriem('arx')
+		const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+		if(usuariusMongo["webhook_ID"])
+		{
+			try
+			{
+				webhooksApiInstance.deleteWebhook(usuariusMongo["webhook_ID"]).then((exitus) =>
+				{
+					console.log("API vocatur, reddit: " + JSON.stringify(exitus.data, null, 2));
+					arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {webhook_ID: undefined}})	
+				}, (error) =>
+				{
+					console.error(error.response.body)
+				});
+				clearInterval(usuariusMongo['temporisSignum']);
+			}
+			catch(error)
+			{
+				console.log("ERROR")
+				console.log(error)
+			}
+		}
+	}
+	try
+	{
+		if(repositorium)
+		{
+			console.log("Mongo Circumscriberi")
+			await repositorium.relinquere();
+		}
+		else
+		{
+			console.log("Mongo non uteris")
+		}
+	}
+	catch(error)
+	{
+		console.log(error)
+	}
+	finally
+	{
+		if (process.platform !== 'darwin')
+		{
+			app.quit()
+		}
+	}
+
+})
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: itinerarium-vacuefacere-gradusii
+ * Descriptio: Vacuefacit itinerarium movens pensa non terminata ad indicem pensôrum agendôrum et pensa transâcta ad indicem pensôrum transâctôrum
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itinerarium-vacuefacere-gradusii", ipcFunctiones.itinerariumVacuefacereGradusII)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intinerarium-vacuefacere-gradusi
+ * Descriptio: petit an usuarius vere itinerārium vacuefacere vellit
+ * Intus: nil
+ * Exitus: nil:
+ */
+
+ipcMain.on("itinerarium-vacuefacere-gradusi", ipcFunctiones.intinerariumVacuefacereGradusI)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: claudit fenestellās quibus itinerarium vacuum fit
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("noli-itinerarium-vacuefacere", ipcFunctiones.noliItinerariumVacuefacere)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: itinerarium-novum-volo
+ * Descriptio: confirmātiōnem itinerārium vacuefaciendī coepit
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itinerarium-novum-volo", ipcFunctiones.itinerariumNovumVolo)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: singularia-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("singularia-typis-exprimere", ipcFunctiones.singulariaTypisExprimere)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___
+ * ||    || || ||\ ||  //   | || | ||  // \\
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_//
+ *
+ * functio************************************
+ * Title: intervalla-typis-exprimere
+ * Descriptio: indicem quae constat ex aditibus directîs creat ut facilius ûsuârius itinerâria typîs exprimat
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("intervalla-typis-exprimere", ipcFunctiones.intervallaTypisExprimere)
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: noli-indicem-creare
+ * Descriptio: Fenestellam quâ indicem itinerâriôrum creâtur tollit 
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("noli-indicem-creare", ipcFunctiones.noliIndicemCreare)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: itineraria-typis-exprimere
+ * Descriptio: Fenestellam legat qua ûsuârius itinerâria exprimenda êligit diêbus scribendô 
+ * Intus: nil
+ * Exitus: nil
+ */
+
+ipcMain.on("itineraria-typis-exprimere", ipcFunctiones.itinerariaTypisExprimere)
+
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: PQSME
+ * Descriptio: Proba an datum ûsuâriî nômen et tesseram pertineant ad ûsuârium repositôriî Mongo
+ * Intus: tesseraMongo
+ * Exitus: nil
+ */
+
+
+ipcMain.on("aditus-ad-asanam", ipcFunctiones.aditusAdAsanam)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: PQSME
+ * Descriptio: Proba an datum ûsuâriî nômen et tesseram pertineant ad ûsuârium repositôriî Mongo
+ * Intus: tesseraMongo
+ * Exitus: nil
+ */
+
+
+ipcMain.on("pqsme-mongo-oauth", ipcFunctiones.pqsmeMongo)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: describePensumn
+ * Descriptio: descrîbitur pensum per rês quae pertinent ad data TRIO (genus pensî, beneficiariî, prôpositum sociâle, etc) suscepta ab formulâ
+ * Intus: descrîptiô pensî (exitus formulariae)
+ * Exitus: nil
+ */
+
+ipcMain.on("describe-pensum", ipcFunctiones.describePensum) 
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: da-servatum-webhook
+ * Descriptio: Servat signum numerium webhook in aerâ ut deleâtur cum ûtilitâs claudêtur
+ * Intus: signum numerium webhook sessionis
+ * Exitus: nil
+ */
+
+ipcMain.on("da-servatum-webhook", ipcFunctiones.servatumWebhook)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: word-constituere
+ * Descriptio: Constituit scapum .docx in quo inscribuntur pensa asanae
+ * Intus: lunae dies huius septimanae
+ * Exitus: nil
+ */
+
+ipcMain.on("word-constituere", ipcFunctiones.wordConstituere)
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: asanaeDiem
+ * Descriptio: Consequî pensa cuiusdam diei quî significatur quoddam signô numeriô
+ * Intus: 
+ * 	(o) eventus
+ * 	(o) signum numerium ûnicum pensî
+ * 	(o) nomen diei
+ * Exitus: nil
+ */
+ipcMain.on("da-asanae-diem", ipcFunctiones.asanaeDiem)
+
+
+/*
+ *  ____ __ __ __  __   ___ ______ __   ___  
+ * ||    || || ||\ ||  //   | || | ||  // \\ 
+ * ||==  || || ||\\|| ((      ||   || ((   ))
+ * ||    \\_// || \||  \\__   ||   ||  \\_// 
+ *                                          
+ * functio************************************
+ * Title: asanaeSectiones
+ * Descriptio: Consequî sectiones hûius Project Asanae
+ * Intus: 
+ * 	(o) eventus
+ * 	(o) conditiones
+ * Exitus: nil
+ */
+//ipcMain.on("da-asanae-sectiones", ipcFunctiones.asanaeSectiones)
+
+const vacuane = (res)=>
+{
+	return (res && Object.keys(res).length === 0 && res.constructor === Object);
+}

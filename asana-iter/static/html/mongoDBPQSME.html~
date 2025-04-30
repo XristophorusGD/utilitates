@@ -4,27 +4,31 @@
 		<meta charset="UTF-16">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self';script-src 'self'">
 		<title>Hello World!</title>
-		<link href="../css/Asanacss.css" rel="stylesheet">
+
 		<link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/mongoDBQSME.css" rel="stylesheet">
 	</head>
 	<body>
 	<div class="container vstack gap-10">
 		<div class="container-fluid">
 			<div class="d-flex justify-content-center">
-				<h1> Vtentiam MongoDB</h1>
+					<h1> Vtentiam MongoDB</h1>
 			</div>
-			<form>
-				<div class="col-auto">
-				<label for="tesseraMongoDB" class="visually-hidden">Tessera</label>
-				<input id= "tesseraMongoDB" name="tesseraMongoDB" type="password" class="form-control" placeholder="Password">
+			<form class="needs-validation" novalidate>
+				<div class="input-group has-validation col-auto">
+					<label for="tesseraMongoDB" class="visually-hidden">Tessera</label>
+					<input id= "tesseraMongoDB" name="tesseraMongoDB" type="password" class="form-control" placeholder="Password">
+					<div id="tessearMongoDBFeedback" class="invalid-feedback">
+						Tessera ign&omacr;ta
+					</div>
 				</div>
-				<div class="col-auto">
-					<button type="submit" class="button mb-3">Proba quis significam me esse (PQSME)</button>
+				<div class="d-grid gap-2">
+					<button type="submit" class="btn btn-primary btn-block">Proba quis significam me esse (PQSME)</button>
 				</div>
 			</form>
 		</div>
 		<div>
-			<ul class="container list-group list-group-horizontal" >
+			<ul class="d-flex list-group list-group-horizontal" >
 				<li class="col-4 list-group-item"> Utimur Node.js <span id="node-version"></span></li>
 				<li class="col-4 list-group-item"> Chromio <span id="chrome-version"></span><li>
 				<li class="col-4 list-group-item">Electro <span id="electron-version"></span><li>

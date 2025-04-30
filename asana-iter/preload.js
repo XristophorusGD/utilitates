@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld(
 		ad: (canalis, conditiones) =>
 			{
 			//approbatio iussorum - index cresci potest
-				let licitiCanales = ["singularia-typis-exprimere", "intervalla-typis-exprimere", "noli-indicem-creare", "itineraria-typis-exprimere","itinerarium-restituere","aditum-ad-asanam","pqsme-mongo-oauth", "describe-pensum","word-constituere", "json-constituere","adde-pensum"];
+				let licitiCanales = ["noli-itinerarium-vacuefacere","itinerarium-vacuefacere-gradusi", "itinerarium-vacuefacere-gradusii","singularia-typis-exprimere", "itinerarium-novum-volo", "intervalla-typis-exprimere", "noli-indicem-creare", "itineraria-typis-exprimere","aditus-ad-asanam","pqsme-mongo-oauth", "describe-pensum","word-constituere", "json-constituere","adde-pensum"];
 			if (licitiCanales.includes(canalis))
 			{
 				ipcRenderer.send(canalis, conditiones);
