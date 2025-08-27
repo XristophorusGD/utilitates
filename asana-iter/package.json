@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "nodeMon": "nodemon -e * --exec npm start",
+    "nodemon": "nodemon -e * --exec npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compileSass": "sass --watch scss:css"
   },
@@ -30,7 +30,7 @@
     "formidable": "^3.5.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.6.0",
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.10",
     "sass": "^1.86.0",
     "superagent": "^8.1.2",
     "uuid": "^10.0.0"

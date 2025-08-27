@@ -79,8 +79,8 @@ exports.aditusAdAsanam = async (e) =>
 	console.log("Asana excitatur")
 
 	const repoDatorum = await repositorium.utiRepositorio()
-	const arces = await repoDatorum.consequiCongeriem('arx')
-	const usuariumMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	const usuarii = await repoDatorum.consequiCongeriem('usuarii')
+	const usuariumMongo = await usuarii.findOne({signum_usuarii:"trioCivisII"});
 	token.accessToken = usuariumMongo.aditusclavis;
 
 }
@@ -544,7 +544,7 @@ exports.wordConstituere = async (e, refdies, fluxum=false) =>
 				{
 					mensisNumP += 1;
 					lunaeDiesP -= currMonthMax;
-					currMonthMaxP = new Date(annus, monthNum, 0).getDate();
+					currMonthMaxP = new Date(annus, mensisNumP, 0).getDate();
 				}
 	//PI.B corrige numerum mensis et anni si transit per annos
 				if (mensisNumP > 11)
@@ -1522,13 +1522,15 @@ async function asanaePensorumSingula(pensorumIndex)
 
 			}).then((adnotationumIndex) =>
 			{
+				console.log(adnotationumIndex[0])
 				adnotationumIndex.sort(((a,b) => a["created_at"] - b["created_at"]))
 				let detrahandum = 1
-				while(adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("description"))
+
+					console.log(adnotationumIndex[adnotationumIndex.length-detrahandum])
+				while(adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("description") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("marked this task complete") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("moved this task from") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("added to TRIO Itinerary") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("duplicated task from") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("marked incomplete") || adnotationumIndex[adnotationumIndex.length-detrahandum].text.includes("changed the due date to") )
 				{
 					detrahandum ++;
 				}
-
 				pensorumIndex[locus[i]][k]['last_comment'] = adnotationumIndex[adnotationumIndex.length-detrahandum].text
 			}).catch((error)=>
 			{
@@ -1679,7 +1681,7 @@ async function asanaeSectionesUltimae()
 		'limit': 10,
 	};
 
-	let indexDierumGID = new Array(1);
+	let indexDierumGID = new Array(2);
 
 	await sectionsApiInstance.getSectionsForProject(project_gid, opts)
 	.then((datae_sectiones) =>
@@ -1698,6 +1700,11 @@ async function asanaeSectionesUltimae()
 			if (dierumSectiones[i].name == "To Do" || dierumSectiones[i].name == "Tareas" || dierumSectiones[i].name == "Tarefas" || dierumSectiones[i].name == "Pensa Agenda")
 			{
 				locus = 1;
+			}
+
+			if (dierumSectiones[i].name == "Routine" || dierumSectiones[i].name == "Rutina" || dierumSectiones[i].name == "Translaticia")
+			{
+				locus = 2;
 			}
 			indexDierumGID[locus] = dierumSectiones[i].gid;
 		}
@@ -1820,10 +1827,9 @@ async function asanaeSectiones()
  */
 
 
-function iterpath(filetype, refdies)
+function iterpath(filetype, refDies)
 {
-
-	let monDate = diesLunae(refdies, 0)
+	let monDate = diesLunae(refDies, 0)
 	let annus = monDate.getFullYear();
 	const monthNum = monDate.getMonth();
 	const mondayDate = monDate.getDate();
@@ -2032,91 +2038,6 @@ function locusTypisExpressionis(nomenExpr)
 		return exprTypis_scapus+versionSuffix;
 }
 
-
-/*
- *  ____ __ __ __  __   ___ ______ __   ___
- * ||    || || ||\ ||  //   | || | ||  // \\
- * ||==  || || ||\\|| ((      ||   || ((   ))
- * ||    \\_// || \||  \\__   ||   ||  \\_//
- *
- * functio************************************
- * Title: iterpath
- * Descriptio: Consequî sectiones hûius Project Asanae
- * Intus:
- *      (o) filetype - genus scapî ad quod itinerârium servandum
- *      (o) monDate - dies Lûnae cûiusdam septimanae (praestitutiône, hûius septimanae)
- * Exitus:
- * 	(o) genere scapî solûtô, locus ubi itinerâria servanda
- * 	(o) genus json datô, locus itinerâriî json
- * 	(o) genus docx datô,
- * 	    (o) locus novissimus - locus itinerâriî generis docx servandî
- * 	    (o) locus praesens - locus itinerâriî iam novê servantî (et legendî)
- */
-function iterpath(filetype, refdies)
-{
-
-	let monDate = diesLunae(refdies, 0)
-	let annus = monDate.getFullYear();
-	const monthNum = monDate.getMonth();
-	const mondayDate = monDate.getDate();
-
-	const fName = "Christopher";
-	const lName = "Davis";
-
-	const menses = ["January", "February", "March",
-		        "April", "May", "June", "July", "August",
-		        "September", "October", "November", "December"];
-
-	    //computa annum fiscalem
-	let anniFiscalisInitium = annus;
-	if (monthNum < 7)
-	{
-		anniFiscalisInitium -= 1;
-	}
-
-	const fiscalyear = anniFiscalisInitium +"_"+(anniFiscalisInitium+1);
-
-	//compone locum loculamenti
-
-	const monthMarked = monDate.getFullYear()+"_"+(monthNum + 1)+"_"+menses[monthNum];
-
-	const iter_dir = [
-	".itineraries",
-	fiscalyear,
-	monthMarked,
-	""];
-	//compone locum itinerarii
-	let iter_name = [lName+fName,
-	"Wk_Iter",
-	mondayDate+menses[monthNum]+annus];
-
-	//creare locum modo recursante (sî locus iam est, nôn est error)
-	fs.mkdirSync(iter_dir.join("/"), {recursive: true});
-
-	const iterfile = iter_dir.join("/") + iter_name.join("_");
-	if(filetype=="")
-	{
-		return iter_dir.join("/");
-	}
-	else if (filetype == ".json")
-	{
-		return iterfile+filetype;
-	}
-	else
-	{
-		let version = 0;
-		let versionSuffix = "";
-		let latestFound = false;
-		while(!latestFound)
-		{
-			version++;
-			versionSuffix = "_va" + version + filetype;
-			latestFound = !(fs.existsSync(iterfile+versionSuffix));
-		}
-		if (version == 1) { return  {"write": iterfile + versionSuffix, "read": false};}
-		return {"write":iterfile + versionSuffix, "read": iterfile+"_va" + (version -1) + filetype};
-	}
-}
 
 function diesLunae(refDay, weekInterval)
 {

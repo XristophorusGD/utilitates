@@ -1,0 +1,56 @@
+Conversation with MongoDB
+Started on June 6, 2025 at 01:13 PM Eastern Time (US & Canada) time EDT (GMT-0400)
+
+---
+
+01:13 PM | Christopher Davis: I am a developer trying to learn more
+
+01:13 PM | MBot: Here are some resources you may find helpful:
+
+MongoDB Developer Center (https://www.mongodb.com/developer/?tck=intercom3326163) for tutorials and code examples. 
+ MongoDB Documentation (https://www.mongodb.com/docs/?tck=intercom3326163) for guides, samples and references. 
+ MongoDB University (https://learn.mongodb.com/?tck=intercom3326163) for video courses on getting started with MongoDB, and building applications that use MongoDB as your database.
+
+MongoDB Community (https://www.mongodb.com/community/?tck=intercom3326163) to discuss anything related to learning, using, developing, or otherwise working with MongoDB products, services, and ecosystem
+
+01:13 PM | MBot: Do you still have questions?
+
+01:13 PM | Christopher Davis: Yes, I do
+
+01:13 PM | MBot: You can ask questions here. How can I help?
+
+01:16 PM | Christopher Davis: Hello! I'm trying to connect to my mongoDB cluster using asana as an identity provider. I'm running to into an error where Compass redirects me to the authentication page for asana, however, when I log in, I receive an error that "client_id" and "client_secret" must authenticate. Both of these are values from the Asana app that I'm creating. I know I can enter the client ID when setting up the Identity Provider for Mongo - but how might I pass the client secret from the Asana App through Mongo?
+
+01:16 PM | MBot: Sorry, as a bot I couldn’t find an answer for that.
+
+01:16 PM | MBot: You can rephrase your question, or talk to our team
+
+01:16 PM | Christopher Davis: Talk to a person 👤
+
+01:16 PM | MBot: Can you please describe your issue?
+
+01:16 PM | Christopher Davis: Hello! I'm trying to connect to my mongoDB cluster using asana as an identity provider. I'm running to into an error where Compass redirects me to the authentication page for asana, however, when I log in, I receive an error that "client_id" and "client_secret" must authenticate. Both of these are values from the Asana app that I'm creating. I know I can enter the client ID when setting up the Identity Provider for Mongo - but how might I pass the client secret from the Asana App through Mongo?
+
+01:24 PM | Shivam from MongoDB: Hi Christopher,
+​ 
+ Thank you for contacting MongoDB support. My name is Shivam and I will be helping you out with your concern. Please allow me some time to check your account details and I will update you with my findings.
+
+01:27 PM | Christopher Davis: Thank you!
+
+01:29 PM | Shivam from MongoDB: Thank you for your patience! When using an Identity Provider (IdP) to connect to your MongoDB cluster (like through Compass), MongoDB expects the authentication process to follow standard OIDC protocol. You correctly added the client ID during the Identity Provider setup in Atlas, but Atlas doesn’t require the client secret to be passed by the end user (like Compass).
+​ 
+ That said, if you’re seeing an error that says "client_id" and "client_secret" must authenticate, this usually means the MongoDB Identity Provider settings might not be fully or correctly configured thus request you to please refer to our documentation named: Authentication and Authorization with OIDC/OAuth 2.0 (https://www.mongodb.com/docs/atlas/security-oidc/#authentication-and-authorization-with-oidc-oauth-2.0). Once done, Compass should redirect you and authenticate successfully using OIDC.
+
+01:32 PM | Christopher Davis: I have a follow up question then, when I set up the Identity Provider, I was also directed to a process to set up a domain. This part confused me as my app is connected to Asana, and thus, I do not own the domain. Would I, by configuring the domain in some way, be able to have the client secret passed?
+
+01:37 PM | Shivam from MongoDB: From the MongoDB Atlas side, when setting up an identity provider, verifying a domain is required to confirm that users logging in belong to your organization. This means your email domain chrisdavis3056@gmail.com must be verified to ensure security and since you are using gmail domain thus I believe this is not possible.
+
+01:40 PM | Christopher Davis: Ahhh! Thank you, but that leads me to another question: To set up the domain, the instructions indicate you either have to upload a DNS record or an HTML document. Where would I find those files in order to confirm that I own the domain?
+
+01:43 PM | Shivam from MongoDB: To verify your domain in MongoDB Atlas for setting up an Identity Provider, you have two options: 
+ 1. Add a DNS record – Atlas gives you a special TXT record to add to your domain settings. 
+2. Upload an HTML file – Atlas gives you a file that you upload to your website so it can be accessed online. 
+ For more information please refer to our documentation named: Manage Domain Mapping for Federated Authentication (https://www.mongodb.com/docs/atlas/security/manage-domain-mapping/#manage-domain-mapping-for-federated-authentication) and Configure Federated Authentication from Microsoft Entra ID (https://www.mongodb.com/docs/atlas/security/federated-auth-azure-ad/?utm_source=chatgpt.com#configure-federated-authentication-from-microsoft-entra-id)
+
+---
+Exported from MongoDB on June 6, 2025 at 06:01 PM Eastern Time (US & Canada) time EDT (GMT-0400)

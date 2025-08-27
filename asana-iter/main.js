@@ -61,7 +61,7 @@ app.whenReady().then(async () =>
 	aditusadrete = await ngrok.forward(
 	{
 		addr: ostiolum,
-		authtoken: "2kOMN9Rlf4ak6eO4phexfkLykTs_832Tme7AGJ6WcPJAAwi2S",
+		authtoken: "2wSJ8e6XOraCBSMdM2SUgNbmEL0_7tsv7jBqofmszFfUKyPYJ",
 		oauth_provider: "google",
 		oauth_allow_emails: "chdavis1@ualr.edu",
 		oauth_allow_domains: "ualr.edu"

@@ -14,7 +14,7 @@ const axios = require("axios")
 const path = require("path")
 const repositorium = require('../../repositorium_datorum/repositorium');
 const Asana = require('asana');
-
+const fs = require('fs')
 require('dotenv').config();
 
 // Data
@@ -22,6 +22,7 @@ const VERVM = true;
 const FALSVM = false;
 exports.responsum = (petitum, responsum) =>
 {
+	console.log(petitum.query.state)
 	if(petitum.query.state !== petitum.signedCookies.statusOauth)
 	{
 		responsum.status(422).send("Stat&#363;s n&#333;n &#299;dem sunt");
@@ -29,10 +30,15 @@ exports.responsum = (petitum, responsum) =>
 	}
 	else
 	{
-		console.log("*** Tessera permutanda eA openauthentication et status responsI agnitiOnis usuariI:\n"
-		)
+	console.log("*** Tessera permutanda eA openauthentication et status responsI agnitiOnis usuariI:\n"
+	)
+	
+	//TERMPORALIA: Nam Double Sending Cookie Faciendum
+	//fs.writeFileSync("oidc.dat", petitum.query['id_token']);	
+	let tessera = petitum.query.code
+	//responsum.redirect(`../oauth/salvare-oauth/?code=${tessera}`);
 
-		responsum.sendFile(path.join(__dirname, "../..","static/html/mongoDBPQSME.html"))
+	responsum.sendFile(path.join(__dirname, "../..","static/html/mongoDBPQSME.html"))
 	}
 };
 
@@ -44,11 +50,13 @@ exports.rectumPQSME = (petitum, responsum) =>
 }
 exports.salvareOauth = async (petitum, responsum) =>
 {
-	const repoDatorum = await repositorium.utiRepositorio()
-	const arces = await repoDatorum.consequiCongeriem('arx')
-	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
-	console.log("salvare")
 
+	console.log("salvare")
+	const repoDatorum = await repositorium.utiRepositorio()
+	const usuarii = await repoDatorum.consequiCongeriem('usuarii')
+	const usuariusMongo = await usuarii.findOne({signum_usuarii:"trioCivisII"});
+	//response.status(200)
+	//return;
 	const materia =
 	{
 		grant_type: "authorization_code",
@@ -78,10 +86,10 @@ exports.salvareOauth = async (petitum, responsum) =>
 		let client = Asana.ApiClient.instance;
 		let token = client.authentications['token'];
 		token.accessToken = data.access_token;
-		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {aditusclavis: data.access_token}})
-		arces.updateOne({signum_usuarii:"trioCivisII"}, {$set: {novusaditus: data.refresh_token}})
+		usuarii.updateOne({signum_usuarii:"trioCivisII"}, {$set: {aditusclavis: data.access_token}})
+		usuarii.updateOne({signum_usuarii:"trioCivisII"}, {$set: {novusaditus: data.refresh_token}})
 		//responsum.redirect(`../access_token=${data.access_token}`);
-		responsum.redirect('../../operari')
+		responsum.redirect('../../operari/')
 	}).catch((error) =>
 	{
 		console.log(error.message);
@@ -102,7 +110,11 @@ exports.agnoscere = (petitum, responsum) =>
 		signed: VERVM
 	});
 	//statu oauth creato, adimus ad paginam agnitiônis Asana
-	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&state=${statusOauth}`);
+
+	//	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=openid%20email%20profile%20default%20identity&state=${statusOauth}`)
+
+	responsum.redirect(`https://app.asana.com/-/oauth_authorize?response_type=code%20id_token&client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=openid%20email%20profile%20default%20identity&state=${statusOauth}`)
+
 }
 
 

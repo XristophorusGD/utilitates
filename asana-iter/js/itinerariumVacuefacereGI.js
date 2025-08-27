@@ -1,5 +1,9 @@
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
+
 document.querySelector("#vacuefacGI").addEventListener("click", (e) =>
-{
+{i
 	window.Asana.ad("itinerarium-vacuefacere-gradusi");
 })
 

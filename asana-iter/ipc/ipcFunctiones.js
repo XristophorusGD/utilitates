@@ -76,9 +76,9 @@ let aditusadrete; //forte periculosum-
 exports.aditusAdAsanam = async (e) =>
 {
 
-	const repoDatorum = await repositorium.utiRepositorio(auctoritasMongo)
-	const arces = await repoDatorum.consequiCongeriem('arx')
-	const usuariusMongo = await arces.findOne({signum_usuarii:"trioCivisII"});
+	const repoDatorum = await repositorium.utiRepositorio()
+	const usuarii = await repoDatorum.consequiCongeriem('usuarii')
+	const usuariumMongo = await usuarii.findOne({signum_usuarii:"trioCivisII"});
 	token.accessToken = usuariumMongo.aditusclavis;
 
 }
@@ -105,7 +105,7 @@ exports.aditusAdAsanam = async (e) =>
 exports.pqsmeMongo = async (e, auctoritasMongo) =>
 {
 	const TESSERA_MONGO_DECOCTA = "f8ffbd4b02bb04d107869211a36c342a24a71404856fb6f020484dcf4069b028"
-	console.log("PQSME NUNCCCC")
+	console.log("Probatur Quem Usuarium Dicit Se Esse")
 	if (crypto.timingSafeEqual(
 		Buffer.from(TESSERA_MONGO_DECOCTA),
 		Buffer.from(crypto.createHash("sha256").update(auctoritasMongo.tesseraMongoDB).digest('hex')

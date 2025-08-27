@@ -1163,7 +1163,7 @@ async function comprobareHoram()
 		let finis = await asanaeSectionesUltimae()
 	
 		console.log("Movens ad novam septimanam")
-		for (let dies in pensorumSingula)
+		/*(for (let dies in pensorumSingula)
 		{
 			for (let pensum of pensorumSingula[dies])
 			{
@@ -1189,6 +1189,7 @@ async function comprobareHoram()
 			}
 		}
 		console.log("Pensa vacuefacta")
+		*/
 	}
 
 	if((nunc - usuariusMongo['itinerariumPraesens'])/(1000*60*60*24) == 0)
@@ -1543,7 +1544,8 @@ async function asanaeSectiones()
 	let sectionsApiInstance = new Asana.SectionsApi();
 	
 	
-	let project_gid = 1207982562429472;
+	// Ut praescripti¿n¿s comprobentur let project_gid = 1207982562429472;
+	let project_gid = 1201915750197023;
 	let opts = {
 		'limit': 10,
 	};
@@ -1718,7 +1720,7 @@ function iterpath(filetype, refdies)
 	//compone locum itinerarii
 	let iter_name = [lName+fName,
 	"Wk_Iter",
-	mondayDate+menses[monthNum]+annus];
+	mondayDate+menses[monthNum]+annus;
 
 	//creare locum modo recursante (sî locus iam est, nôn est error)
 	fs.mkdirSync(iter_dir.join("/"), {recursive: true});

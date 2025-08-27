@@ -386,9 +386,13 @@ class fenestellaItinerariumVacuefaciendiGI
 		fenestellaItinerariumVacuefaciendiGI.#seConstituit = false;
 	}
 }
+
+
+
+
+
 module.exports =
 {
-
 	fenestellaItinerariumVacuefaciendiGII: fenestellaItinerariumVacuefaciendiGII,
 	fenestellaItinerariumVacuefaciendiGI: fenestellaItinerariumVacuefaciendiGI,
 	fenestellaPQSME: fenestellaPQSME,

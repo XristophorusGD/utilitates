@@ -1,7 +1,44 @@
 const mongoose = require('mongoose');
-const {MongoClient} = require('mongodb');
+const fs = require('fs');
+const {MongoClient, OIDCCallbackParams, OIDCResponse} = require('mongodb');
+//import type {OIDCCallbackParams} from 'mongodb'
+//import type {OIDCCallbackParams} from 'mongodb'
 
+/*const consequiAuctoritates = (params: OIDCCallbackParams): Promise<OIDCResponse> =>
+{
+	const signumOIDC = fs.readFileSync("oidc.dat", "utf8")
+	return 
+	{
+		accessToken:      signumOIDC,
+		expiresInSeconds: 300,
+		refreshToken:     signumOIDC
+	};
+}*/
 
+async function consequiAuctoritates(timeoutContext, versio, idpInfo, usuarius, refreshToken)
+{
+	console.log("OIDC-Auth")
+	const signumOIDC = fs.readFileSync("oidc.dat", "utf8")
+	return {
+		accessToken:      signumOIDC,
+		expiresInSeconds: 300,
+		refreshToken:     signumOIDC
+	};
+}
+
+/*
+const consequiAuctoritates = new Promise((resolve, reject) =>
+{
+	console.log("OIDC-Auth")
+	const signumOIDC = fs.readFileSync("oidc.dat", "utf8")
+	
+	resolve({
+		accessToken:      signumOIDC,
+		expiresInSeconds: 300,
+		refreshToken:     signumOIDC
+	});
+})
+*/
 class ususRepositorii
 {
 	static #simulacrum;
@@ -32,9 +69,19 @@ class ususRepositorii
 	{
 		try
 		{
-			const REPOSITORIVM_DATORVM = `mongodb://${auctoritasMongo['usuarium']}:${auctoritasMongo['tesseraMongoDB']}@0.0.0.0:27017`
+			//const REPOSITORIVM_DATORVM = `mongodb://${auctoritasMongo['usuarium']}:${auctoritasMongo['tesseraMongoDB']}@0.0.0.0:27017`
+			const REPOSITORIVM_DATORVM = `mongodb+srv://${auctoritasMongo['usuarium']}:${auctoritasMongo['tesseraMongoDB']}@trio-forecaster-test.jb40h.mongodb.net/`
+			//const REPOSITORIVM_DATORVM = `mongodb+srv://CivisPrimus@trio-forecaster-test.jb40h.mongodb.net/?authMechanism=MONGODB-OIDC`
+			//const REPOSITORIVM_DATORVM = `mongodb+srv://trio-forecaster-test.jb40h.mongodb.net/?authSource=%24external&authMechanism=MONGODB-OIDC`
 			ususRepositorii.#usuariumMongo = new MongoClient(REPOSITORIVM_DATORVM)
-			ususRepositorii.#repositorium = ususRepositorii.#usuariumMongo.db("test");
+				/*{
+					authMechanismProperties:
+					{
+						OIDC_CALLBACK: consequiAuctoritates
+					}
+				}
+			)*/
+			ususRepositorii.#repositorium = ususRepositorii.#usuariumMongo.db("trio-higher-edu");
 			console.log("Uteris Repositorio Probationis")
 		}
 		catch(error)
@@ -50,16 +97,9 @@ class ususRepositorii
 		{
 			if(!ususRepositorii.#estneUsus())
 			{
-				if(auctoritates != "")
-				{
-					ususRepositorii.#seConstituit = true;
-					ususRepositorii.#simulacrum = new ususRepositorii();
-					await ususRepositorii.#simulacrum.#initialize(auctoritates);
-				}
-				else
-				{
-					console.log("Mongo DB non uteris")
-				}
+				ususRepositorii.#seConstituit = true;
+				ususRepositorii.#simulacrum = new ususRepositorii();
+				await ususRepositorii.#simulacrum.#initialize(auctoritates);
 			}
 			solutum(ususRepositorii.#simulacrum)
 		});
